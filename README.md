@@ -5,4 +5,3 @@ Good leadership practices can positively transform people's lives. We believe no
 
 Want to contribute? Just send me an email at leadershipproject07@gmail.com
 
-Also, check this out:https://assorted-windscreen-8ed.notion.site/Welcome-to-Project-Leadership-db715f7cdee241ada09534ae97364d86?pvs=4
