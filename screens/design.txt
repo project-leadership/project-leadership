@@ -1,0 +1,130 @@
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+
+const NotesPage = ({ navigation }) => {
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handlePress = (item) => {
+    setSelectedItem(item);
+  };
+
+  const getItemStyle = (item) => ({
+    backgroundColor: selectedItem === item ? '#393938' : 'white',
+    color: selectedItem === item ? 'white' : 'black',
+  });
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>Notes</Text>
+      </View>
+      <View style={styles.contentContainer}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+          <TouchableOpacity
+            style={[styles.item, { backgroundColor: getItemStyle('user').backgroundColor }]}
+            onPress={() => handlePress('user')}
+          >
+            <Feather name="user" size={24} color={getItemStyle('user').color} />
+            <Text style={[styles.itemText, { color: getItemStyle('user').color }]}>Settings</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.item, { backgroundColor: getItemStyle('our').backgroundColor }]}
+            onPress={() => handlePress('our')}
+          >
+            <Feather name="file-text" size={24} color={getItemStyle('our').color} />
+            <Text style={[styles.itemText, { color: getItemStyle('our').color }]}>Our</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.item, { backgroundColor: getItemStyle('yours').backgroundColor }]}
+            onPress={() => handlePress('yours')}
+          >
+            <Feather name="file-text" size={24} color={getItemStyle('yours').color} />
+            <Text style={[styles.itemText, { color: getItemStyle('yours').color }]}>Yours</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.item, { backgroundColor: getItemStyle('homeworkLog').backgroundColor }]}
+            onPress={() => handlePress('homeworkLog')}
+          >
+            <Feather name="bell" size={24} color={getItemStyle('homeworkLog').color} />
+            <Text style={[styles.itemText, { color: getItemStyle('homeworkLog').color }]}>Log</Text>
+          </TouchableOpacity>
+        </ScrollView>
+        
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  headerContainer: {
+    marginBottom: 16,
+  },
+  headerText: {
+    fontSize: 30,
+    fontWeight: '500',
+    color: "#393938",
+  },
+  contentContainer: {
+    flex: 1,
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  dateText: {
+    fontSize: 16,
+    color: '#393938',
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#ede6e6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,
+  },
+  scrollContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 5,
+  },
+  item: {
+    marginHorizontal: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 12,
+    width: 120,
+    height: 50,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+    marginLeft: -3,
+    marginRight: 12,
+  },
+  itemText: {
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  belowContainerText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#393938',
+    textAlign: 'center',
+  },
+});
+
+export default NotesPage;
