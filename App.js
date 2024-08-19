@@ -1,65 +1,82 @@
 // App.js
 
-import React, { useState, useEffect, useRef } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, TouchableOpacity, Text, View, StyleSheet, Modal, ScrollView, Animated } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import NotesPage from './screens/NotesPage';
-import CoursePage from './screens/CoursePage';
-import LoginPage from './screens/LoginPage';
-import JournalPage from './screens/JournalPage';
-import SettingsPage from './screens/SettingsPage';
-import HomeworkPage from './screens/HomeworkPage';
-import YourPrinciplePage from './screens/YourPrinciplePage';
-import OurPrinciplePage from './screens/OurPrinciplePage';
-import styles from './screens/styles';
-import { BlurView } from 'expo-blur';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect, useRef } from "react";
+import { StatusBar } from "expo-status-bar";
+import {
+  SafeAreaView,
+  TouchableOpacity,
+  Text,
+  View,
+  StyleSheet,
+  Modal,
+  ScrollView,
+  Animated,
+} from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import NotesPage from "./screens/NotesPage";
+import CoursePage from "./screens/CoursePage";
+import LoginPage from "./screens/LoginPage";
+import JournalPage from "./screens/JournalPage";
+import SettingsPage from "./screens/SettingsPage";
+import HomeworkPage from "./screens/HomeworkPage";
+import YourPrinciplePage from "./screens/YourPrinciplePage";
+import OurPrinciplePage from "./screens/OurPrinciplePage";
+import styles from "./screens/styles";
+import { BlurView } from "expo-blur";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Haptics from "expo-haptics";
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState("home");
   const [showPopup, setShowPopup] = useState(true);
   const [isFabOpen, setFabOpen] = useState(false);
-  const [savedEntry, setSavedEntry] = useState('');
+  const [savedEntry, setSavedEntry] = useState("");
   const [showOptions, setShowOptions] = useState(false);
   const [moreOptionsVisible, setMoreOptionsVisible] = useState(null);
-  const [entryTemplate, setEntryTemplate] = useState('');
+  const [entryTemplate, setEntryTemplate] = useState("");
 
   const scrollY = useRef(new Animated.Value(0)).current;
-  
+
   const headerHeight = scrollY.interpolate({
     inputRange: [0, 100],
     outputRange: [100, 100],
-    extrapolate: 'clamp',
+    extrapolate: "clamp",
   });
 
   const headerPosition = scrollY.interpolate({
     inputRange: [0, 100],
     outputRange: [0, -40],
-    extrapolate: 'clamp',
+    extrapolate: "clamp",
   });
 
   const headerFontSize = scrollY.interpolate({
     inputRange: [0, 100],
     outputRange: [30, 17],
-    extrapolate: 'clamp',
+    extrapolate: "clamp",
   });
 
   const fabOptions = [
-    { icon: 'book', label: 'Write Principle' },
-    { icon: 'alert-circle', label: 'Pain Button' },
-    { icon: 'message-circle', label: 'Crucial Conversations' },
+    { icon: "book", label: "Write Principle" },
+    { icon: "alert-circle", label: "Pain Button" },
+    { icon: "message-circle", label: "Crucial Conversations" },
   ];
 
   useEffect(() => {
     retrieveData();
   }, [currentPage]);
 
+  // When the fab is open
+  useEffect(() => {
+    if (isFabOpen) {
+      Haptics.selectionAsync();
+    }
+  }, [isFabOpen]);
+
   const retrieveData = async () => {
     try {
-      const value = await AsyncStorage.getItem('journalEntry');
-      const template = await AsyncStorage.getItem('entryTemplate');
+      const value = await AsyncStorage.getItem("journalEntry");
+      const template = await AsyncStorage.getItem("entryTemplate");
       if (value !== null) {
         setSavedEntry(value);
       }
@@ -67,33 +84,33 @@ export default function App() {
         setEntryTemplate(template);
       }
     } catch (error) {
-      console.error('Error retrieving data', error);
+      console.error("Error retrieving data", error);
     }
   };
 
   const saveData = async (entry) => {
     try {
-      const existingEntry = await AsyncStorage.getItem('journalEntry');
-      const newEntry = existingEntry ? existingEntry + '\n\n' + entry : entry;
-      await AsyncStorage.setItem('journalEntry', newEntry);
-      console.log('Data appended successfully');
+      const existingEntry = await AsyncStorage.getItem("journalEntry");
+      const newEntry = existingEntry ? existingEntry + "\n\n" + entry : entry;
+      await AsyncStorage.setItem("journalEntry", newEntry);
+      console.log("Data appended successfully");
       retrieveData();
     } catch (error) {
-      console.error('Error saving data', error);
+      console.error("Error saving data", error);
     }
   };
 
   const deleteEntry = async (index) => {
     try {
-      const entries = savedEntry.split('\n\n');
+      const entries = savedEntry.split("\n\n");
       entries.splice(index, 1);
-      const newSavedEntry = entries.join('\n\n');
-      await AsyncStorage.setItem('journalEntry', newSavedEntry);
+      const newSavedEntry = entries.join("\n\n");
+      await AsyncStorage.setItem("journalEntry", newSavedEntry);
       setSavedEntry(newSavedEntry);
       setMoreOptionsVisible(null);
-      console.log('Entry deleted successfully');
+      console.log("Entry deleted successfully");
     } catch (error) {
-      console.error('Error deleting entry', error);
+      console.error("Error deleting entry", error);
     }
   };
 
@@ -104,7 +121,7 @@ export default function App() {
   };
 
   const handleFabPress = () => {
-    navigateTo('journal');
+    navigateTo("journal");
   };
 
   const toggleFab = () => {
@@ -116,7 +133,7 @@ export default function App() {
   };
 
   const renderContent = () => {
-    if (currentPage === 'home') {
+    if (currentPage === "home") {
       return (
         <Animated.ScrollView
           contentContainerStyle={{ paddingTop: 120 }}
@@ -129,36 +146,61 @@ export default function App() {
         >
           {showPopup && (
             <View style={[styles.popup, localStyles.popup]}>
-              <Text style={styles.popupText} onPress={() => navigateTo('login')}>
-                You're currently logged in as a guest. Click here to create a profile.
+              <Text
+                style={styles.popupText}
+                onPress={() => navigateTo("login")}
+              >
+                You're currently logged in as a guest. Click here to create a
+                profile.
               </Text>
-              <TouchableOpacity onPress={() => setShowPopup(false)} style={styles.closeButton}>
+              <TouchableOpacity
+                onPress={() => setShowPopup(false)}
+                style={styles.closeButton}
+              >
                 <Feather name="x" size={20} color="#393938" />
               </TouchableOpacity>
             </View>
           )}
 
           {savedEntry ? (
-            savedEntry.split('\n\n').map((entry, index) => (
+            savedEntry.split("\n\n").map((entry, index) => (
               <View key={index} style={localStyles.entryContainer}>
-                <Text style={localStyles.entryTemplate}>{entryTemplate || 'Journal Entry'}:</Text>
+                <Text style={localStyles.entryTemplate}>
+                  {entryTemplate || "Journal Entry"}:
+                </Text>
                 <Text style={localStyles.entryText}>{entry}</Text>
                 <View style={localStyles.hr} />
                 <View style={localStyles.entryFooter}>
-                  <Text style={localStyles.entryDate}>{new Date().toLocaleDateString()}</Text>
+                  <Text style={localStyles.entryDate}>
+                    {new Date().toLocaleDateString()}
+                  </Text>
                   <TouchableOpacity onPress={() => toggleMoreOptions(index)}>
-                    <Feather name="more-horizontal" size={16} color="#333" style={localStyles.moreIcon} />
+                    <Feather
+                      name="more-horizontal"
+                      size={16}
+                      color="#333"
+                      style={localStyles.moreIcon}
+                    />
                   </TouchableOpacity>
                 </View>
                 {moreOptionsVisible === index && (
                   <View style={localStyles.optionsContainer}>
-                    <TouchableOpacity style={localStyles.optionButton} onPress={() => console.log('Edit')}>
+                    <TouchableOpacity
+                      style={localStyles.optionButton}
+                      onPress={() => console.log("Edit")}
+                    >
                       <Text style={localStyles.optionText}>Edit</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={localStyles.optionButton} onPress={() => console.log('Bookmark')}>
+                    <TouchableOpacity
+                      style={localStyles.optionButton}
+                      onPress={() => console.log("Bookmark")}
+                    >
                       <Text style={localStyles.optionText}>Bookmark</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={localStyles.optionButton} onPress={() => deleteEntry(index)}>
+                    <TouchableOpacity
+                      style={localStyles.optionButton}
+                      onPress={() => deleteEntry(index)}
+                    >
                       <Text style={localStyles.optionText}>Delete</Text>
                     </TouchableOpacity>
                   </View>
@@ -173,14 +215,23 @@ export default function App() {
     } else {
       return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} horizontal={false}>
-          {currentPage === 'notes' && <NotesPage navigateTo={navigateTo} deleteEntry={deleteEntry} savedEntry={savedEntry} setSavedEntry={setSavedEntry} />}
-          {currentPage === 'course' && <CoursePage />}
-          {currentPage === 'login' && <LoginPage navigateTo={navigateTo} />}
-          {currentPage === 'journal' && <JournalPage navigateTo={navigateTo} saveData={saveData} />}
-          {currentPage === 'settings' && <SettingsPage />}
-          {currentPage === 'homework' && <HomeworkPage />}
-          {currentPage === 'yourprinciple' && <YourPrinciplePage />}
-          {currentPage === 'ourprinciple' && <OurPrinciplePage />}
+          {currentPage === "notes" && (
+            <NotesPage
+              navigateTo={navigateTo}
+              deleteEntry={deleteEntry}
+              savedEntry={savedEntry}
+              setSavedEntry={setSavedEntry}
+            />
+          )}
+          {currentPage === "course" && <CoursePage />}
+          {currentPage === "login" && <LoginPage navigateTo={navigateTo} />}
+          {currentPage === "journal" && (
+            <JournalPage navigateTo={navigateTo} saveData={saveData} />
+          )}
+          {currentPage === "settings" && <SettingsPage />}
+          {currentPage === "homework" && <HomeworkPage />}
+          {currentPage === "yourprinciple" && <YourPrinciplePage />}
+          {currentPage === "ourprinciple" && <OurPrinciplePage />}
         </ScrollView>
       );
     }
@@ -188,23 +239,38 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {currentPage === 'home' && (
-        <Animated.View 
+      {currentPage === "home" && (
+        <Animated.View
           style={[
-            styles.header, 
-            { 
+            styles.header,
+            {
               height: headerHeight,
               transform: [{ translateY: headerPosition }],
-              position: 'absolute',
+              position: "absolute",
               left: -23,
               right: 0,
               zIndex: 1000,
-              backgroundColor: '#fafafa',
-            }
+              backgroundColor: "#fafafa",
+            },
           ]}
         >
-          <Animated.View style={[styles.headerContent, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20 }]}>
-            <Animated.Text style={[styles.headerText, { fontSize: headerFontSize, marginLeft: 20 }]}>
+          <Animated.View
+            style={[
+              styles.headerContent,
+              {
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                paddingHorizontal: 20,
+              },
+            ]}
+          >
+            <Animated.Text
+              style={[
+                styles.headerText,
+                { fontSize: headerFontSize, marginLeft: 20 },
+              ]}
+            >
               Project Leadership
             </Animated.Text>
             <TouchableOpacity onPress={() => setShowOptions(!showOptions)}>
@@ -218,7 +284,7 @@ export default function App() {
 
       {renderContent()}
 
-      {currentPage === 'home' && (
+      {currentPage === "home" && (
         <>
           <TouchableOpacity
             style={styles.fab}
@@ -231,17 +297,29 @@ export default function App() {
           {isFabOpen && (
             <Modal transparent animationType="fade">
               <BlurView intensity={50} style={localStyles.blurView}>
-                <TouchableOpacity style={localStyles.closeArea} onPress={toggleFab} />
+                <TouchableOpacity
+                  style={localStyles.closeArea}
+                  onPress={toggleFab}
+                />
 
                 <View style={localStyles.fabOptionsContainer}>
-                  {fabOptions.map(option => (
-                    <TouchableOpacity 
-                      key={option.label} 
-                      style={localStyles.fabOption} 
-                      onPress={() => navigateTo(option.label.toLowerCase().replace(' ', ''))}
+                  {fabOptions.map((option) => (
+                    <TouchableOpacity
+                      key={option.label}
+                      style={localStyles.fabOption}
+                      onPress={() =>
+                        navigateTo(option.label.toLowerCase().replace(" ", ""))
+                      }
                     >
-                      <Feather name={option.icon} size={20} color="#393938" style={localStyles.fabOptionIcon} />
-                      <Text style={localStyles.fabOptionText}>{option.label}</Text>
+                      <Feather
+                        name={option.icon}
+                        size={20}
+                        color="#393938"
+                        style={localStyles.fabOptionIcon}
+                      />
+                      <Text style={localStyles.fabOptionText}>
+                        {option.label}
+                      </Text>
                     </TouchableOpacity>
                   ))}
                 </View>
@@ -253,20 +331,49 @@ export default function App() {
 
       <View style={styles.bottomNav}>
         <LinearGradient
-          colors={['rgba(250, 250, 250, 0)', 'rgba(250, 250, 250, 0.9)']}
+          colors={["rgba(250, 250, 250, 0)", "rgba(250, 250, 250, 0.9)"]}
           style={styles.gradient}
         />
-        <TouchableOpacity style={styles.navItem} onPress={() => navigateTo('home')}>
-          <Feather name="home" size={24} color={currentPage === 'home' ? '#393938' : 'grey'} />
-          <Text style={{ color: currentPage === 'home' ? '#393938' : 'grey' }}>Home</Text>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => navigateTo("home")}
+        >
+          <Feather
+            name="home"
+            size={24}
+            color={currentPage === "home" ? "#393938" : "grey"}
+          />
+          <Text style={{ color: currentPage === "home" ? "#393938" : "grey" }}>
+            Home
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigateTo('course')}>
-          <Feather name="book-open" size={24} color={currentPage === 'course' ? '#393938' : 'grey'} />
-          <Text style={{ color: currentPage === 'course' ? '#393938' : 'grey' }}>Course</Text>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => navigateTo("course")}
+        >
+          <Feather
+            name="book-open"
+            size={24}
+            color={currentPage === "course" ? "#393938" : "grey"}
+          />
+          <Text
+            style={{ color: currentPage === "course" ? "#393938" : "grey" }}
+          >
+            Course
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigateTo('notes')}>
-          <Feather name="book" size={24} color={currentPage === 'notes' ? '#393938' : 'grey'} />
-          <Text style={{ color: currentPage === 'notes' ? '#393938' : 'grey' }}>Notes</Text>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => navigateTo("notes")}
+        >
+          <Feather
+            name="book"
+            size={24}
+            color={currentPage === "notes" ? "#393938" : "grey"}
+          />
+          <Text style={{ color: currentPage === "notes" ? "#393938" : "grey" }}>
+            Notes
+          </Text>
         </TouchableOpacity>
       </View>
       <StatusBar style="auto" />
@@ -276,10 +383,10 @@ export default function App() {
 
 const localStyles = StyleSheet.create({
   optionsContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     right: 0,
-    backgroundColor: '#f5eded',
+    backgroundColor: "#f5eded",
     borderRadius: 8,
     zIndex: 1000,
     width: 150,
@@ -289,37 +396,37 @@ const localStyles = StyleSheet.create({
   optionButton: {
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    borderBottomColor: "#ddd",
   },
   optionText: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
   popup: {
     zIndex: 999,
   },
   blurView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   closeArea: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
   fabOptionsContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 15,
     padding: 20,
     zIndex: 2,
     width: 250,
   },
   fabOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 10,
   },
   fabOptionIcon: {
@@ -327,44 +434,44 @@ const localStyles = StyleSheet.create({
   },
   fabOptionText: {
     fontSize: 16,
-    color: '#393938',
+    color: "#393938",
   },
   entryContainer: {
     marginTop: 20,
     marginHorizontal: 20,
     padding: 15,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 6,
     elevation: 2,
-    position: 'relative',
+    position: "relative",
   },
   entryTemplate: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   entryText: {
     fontSize: 18,
-    color: '#333',
+    color: "#333",
   },
   hr: {
-    borderBottomColor: '#ddd',
+    borderBottomColor: "#ddd",
     borderBottomWidth: 1,
     marginVertical: 10,
-    marginHorizontal:0,
+    marginHorizontal: 0,
   },
   entryFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   entryDate: {
     fontSize: 14,
-    color: '#555',
+    color: "#555",
   },
   moreIcon: {
     marginLeft: 10,
