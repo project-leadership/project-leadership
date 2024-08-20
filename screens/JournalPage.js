@@ -51,7 +51,7 @@ const JournalPage = ({ navigation, saveData }) => {
 
   useEffect(() => {
     Animated.timing(categoryBarAnimation, {
-      toValue: selectedCategory === "Recommended" ? (-width + width) : (width - width / 2) - 5 * 4,
+      toValue: selectedCategory === "Recommended" ? 0 : (width / 2) - (5 * 6),
       duration: 300,
       useNativeDriver: true,
     }).start();
