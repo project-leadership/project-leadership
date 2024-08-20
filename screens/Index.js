@@ -25,6 +25,7 @@ import styles from "./styles";
 import { BlurView } from "expo-blur";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Haptics from "expo-haptics";
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 
@@ -36,6 +37,7 @@ export default function App() {
   const [showOptions, setShowOptions] = useState(false);
   const [moreOptionsVisible, setMoreOptionsVisible] = useState(null);
   const [entryTemplate, setEntryTemplate] = useState("");
+  const navigation = useNavigation();
 
   const scrollY = useRef(new Animated.Value(0)).current;
 
@@ -72,6 +74,8 @@ export default function App() {
     if (isFabOpen) {
       Haptics.selectionAsync();
     }
+
+    navigation.navigate("JournalPage");
   }, [isFabOpen]);
 
   const retrieveData = async () => {
