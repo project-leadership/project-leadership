@@ -8,9 +8,12 @@ import {
   Animated,
   Modal,
   TextInput,
+  Dimensions,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const { width, height } = Dimensions.get("window");
 
 const JournalPage = ({ navigation, saveData }) => {
   const [selectedCategory, setSelectedCategory] = useState("Recommended");
@@ -21,6 +24,7 @@ const JournalPage = ({ navigation, saveData }) => {
   const [recentTemplates, setRecentTemplates] = useState([]);
   const [journalEntries, setJournalEntries] = useState([]);
   const fabAnimation = useRef(new Animated.Value(0)).current;
+  const categoryBarAnimation = useRef(new Animated.Value(0)).current // X Position of black bar
 
   const categories = ["Recommended", "Recent"];
   const recommendedTemplates = ["Template A", "Template B", "Template C"];
@@ -44,6 +48,14 @@ const JournalPage = ({ navigation, saveData }) => {
       useNativeDriver: true,
     }).start();
   }, [isFabOpen]);
+
+  useEffect(() => {
+    Animated.timing(categoryBarAnimation, {
+      toValue: selectedCategory === "Recommended" ? (-width + width) : (width - width / 2) - 5 * 4,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, [selectedCategory])
 
   useEffect(() => {
     retrieveData();
@@ -128,6 +140,7 @@ const JournalPage = ({ navigation, saveData }) => {
   return (
     <View style={styles.container}>
       <View style={styles.categoryBar}>
+      <Animated.View style={[styles.animatedRectangle, { transform: [{ translateX: categoryBarAnimation }] }]} />
         {categories.map((category) => (
           <TouchableOpacity
             key={category}
@@ -249,6 +262,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: "100%",
     alignSelf: "center",
+    zIndex: -2,
   },
   categoryItem: {
     flex: 1,
@@ -257,11 +271,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   selectedCategoryItem: {
-    backgroundColor: "#393938",
+    // backgroundColor: "#393938",
   },
   categoryItemText: {
     color: "#393938",
     fontWeight: "500",
+    textAlign: "center",
   },
   selectedCategoryItemText: {
     color: "#fff",
@@ -334,6 +349,17 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
+  animatedRectangle: {
+    backgroundColor: "#393938",
+    position: "absolute",
+    height: 50,
+    width: 50,
+    zIndex: -1,
+    borderRadius: 25,
+    marginBottom: 20,
+    width: (width / 2) - 5,
+    alignSelf: "center",
+  }
 });
 
 export default JournalPage;
