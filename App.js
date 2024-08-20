@@ -11,6 +11,8 @@ import {
   Modal,
   ScrollView,
   Animated,
+  Pressable,
+  Dimensions,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -26,6 +28,8 @@ import styles from "./screens/styles";
 import { BlurView } from "expo-blur";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Haptics from "expo-haptics";
+
+const { width, height } = Dimensions.get("window");
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState("home");
@@ -162,54 +166,64 @@ export default function App() {
             </View>
           )}
 
-          {savedEntry ? (
-            savedEntry.split("\n\n").map((entry, index) => (
-              <View key={index} style={localStyles.entryContainer}>
-                <Text style={localStyles.entryTemplate}>
-                  {entryTemplate || "Journal Entry"}:
-                </Text>
-                <Text style={localStyles.entryText}>{entry}</Text>
-                <View style={localStyles.hr} />
-                <View style={localStyles.entryFooter}>
-                  <Text style={localStyles.entryDate}>
-                    {new Date().toLocaleDateString()}
+          <View style={localStyles.entries}>
+            {savedEntry ? (
+              savedEntry.split("\n\n").map((entry, index) => (
+                <Pressable
+                  key={index}
+                  style={localStyles.entryContainer}
+                  onPress={() => {
+                    if (moreOptionsVisible) {
+                      setMoreOptionsVisible(false);
+                    }
+                  }}
+                >
+                  <Text style={localStyles.entryTemplate}>
+                    {entryTemplate || "Journal Entry"}
                   </Text>
-                  <TouchableOpacity onPress={() => toggleMoreOptions(index)}>
-                    <Feather
-                      name="more-horizontal"
-                      size={16}
-                      color="#333"
-                      style={localStyles.moreIcon}
-                    />
-                  </TouchableOpacity>
-                </View>
-                {moreOptionsVisible === index && (
-                  <View style={localStyles.optionsContainer}>
-                    <TouchableOpacity
-                      style={localStyles.optionButton}
-                      onPress={() => console.log("Edit")}
-                    >
-                      <Text style={localStyles.optionText}>Edit</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={localStyles.optionButton}
-                      onPress={() => console.log("Bookmark")}
-                    >
-                      <Text style={localStyles.optionText}>Bookmark</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={localStyles.optionButton}
-                      onPress={() => deleteEntry(index)}
-                    >
-                      <Text style={localStyles.optionText}>Delete</Text>
+                  <Text style={localStyles.entryText}>{entry}</Text>
+                  <View style={localStyles.hr} />
+                  <View style={localStyles.entryFooter}>
+                    <Text style={localStyles.entryDate}>
+                      {new Date().toLocaleDateString()}
+                    </Text>
+                    <TouchableOpacity onPress={() => toggleMoreOptions(index)}>
+                      <Feather
+                        name="more-horizontal"
+                        size={16}
+                        color="#333"
+                        style={localStyles.moreIcon}
+                      />
                     </TouchableOpacity>
                   </View>
-                )}
-              </View>
-            ))
-          ) : (
-            <Text style={localStyles.entryText}>No saved entry found.</Text>
-          )}
+                  {moreOptionsVisible === index && (
+                    <View style={localStyles.optionsContainer}>
+                      <TouchableOpacity
+                        style={localStyles.optionButton}
+                        onPress={() => console.log("Edit")}
+                      >
+                        <Text style={localStyles.optionText}>Edit</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={localStyles.optionButton}
+                        onPress={() => console.log("Bookmark")}
+                      >
+                        <Text style={localStyles.optionText}>Bookmark</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={localStyles.optionButton}
+                        onPress={() => deleteEntry(index)}
+                      >
+                        <Text style={localStyles.optionText}>Delete</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </Pressable>
+              ))
+            ) : (
+              <Text style={localStyles.entryText}>No saved entry found.</Text>
+            )}
+          </View>
         </Animated.ScrollView>
       );
     } else {
@@ -438,7 +452,7 @@ const localStyles = StyleSheet.create({
   },
   entryContainer: {
     marginTop: 20,
-    marginHorizontal: 20,
+    width: width * 0.86,
     padding: 15,
     backgroundColor: "white",
     borderRadius: 10,
@@ -447,7 +461,8 @@ const localStyles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 6,
     elevation: 2,
-    position: "relative",
+    borderColor: "#999999",
+    borderWidth: 1,
   },
   entryTemplate: {
     fontSize: 22,
@@ -475,5 +490,10 @@ const localStyles = StyleSheet.create({
   },
   moreIcon: {
     marginLeft: 10,
+  },
+  entries: {
+    justifyContent: "center",
+    width: "95%",
+    paddingBottom: 2,
   },
 });
