@@ -23,6 +23,7 @@ const JournalPage = ({ navigation, saveData }) => {
   const [inputValue, setInputValue] = useState("");
   const [recentTemplates, setRecentTemplates] = useState([]);
   const [journalEntries, setJournalEntries] = useState([]);
+  const [entryTemplates, setEntryTemplates] = useState("");
   const fabAnimation = useRef(new Animated.Value(0)).current;
   const categoryBarAnimation = useRef(new Animated.Value(0)).current // X Position of black bar
 
@@ -110,12 +111,20 @@ const JournalPage = ({ navigation, saveData }) => {
         JSON.stringify(updatedEntries)
       );
 
+      // const updatedEntryTemplates = `${entryTemplates ? entryTemplates : ""}${entryTemplates ? "\n\n" : ""}${selectedTemplate}`;
+      // setEntryTemplates(updatedEntryTemplates);
+      // await AsyncStorage.setItem(
+      //   "entryTemplate",
+      //   updatedEntryTemplates
+      // )
+
       // Clear the input and close the modal
       setInputValue("");
       setModalVisible(false);
 
       // Save the data using the provided saveData function
-      await saveData(newEntry);
+      await saveData(newEntry, selectedTemplate);
+      retrieveData();
     } catch (error) {
       console.error("Error saving data", error);
     }
@@ -131,6 +140,11 @@ const JournalPage = ({ navigation, saveData }) => {
       const storedEntries = await AsyncStorage.getItem("journalEntries");
       if (storedEntries) {
         setJournalEntries(JSON.parse(storedEntries));
+      }
+
+      const storedEntryTemplates = await AsyncStorage.getItem("entryTemplate");
+      if(storedEntryTemplates){
+        setEntryTemplates(storedEntryTemplates);
       }
     } catch (error) {
       console.error("Error retrieving data", error);
