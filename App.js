@@ -198,9 +198,7 @@ export default function App() {
                   </Text>
                   <TruncateText
                     style={localStyles.entryText}
-                    text={
-                      "entryaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-                    }
+                    text={entry}
                     onThreeDotsPressed={(_, setHasToTruncate) => {
                       setHasToTruncate(false);
                     }}
