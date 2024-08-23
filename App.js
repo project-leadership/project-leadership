@@ -71,7 +71,6 @@ export default function App() {
   useEffect(() => {
     if (isFabOpen) {
       Haptics.selectionAsync();
-      navigateTo("journal");
     }
   }, [isFabOpen]);
 
