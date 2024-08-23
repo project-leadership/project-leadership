@@ -152,7 +152,7 @@ const NotesPage = ({ navigateTo, deleteEntry, savedEntry, setSavedEntry }) => {
         {filterEntries().length > 0 ? (
           filterEntries().map((entry, index) => (
             <View key={index} style={localStyles.entryContainer}>
-              <Text style={localStyles.entryTemplate}>{entryTemplate || 'Journal Entry'}:</Text>
+              <Text style={localStyles.entryTemplate}>{entryTemplate.split("\n\n")[index] || 'Journal Entry'}:</Text>
               <Text style={localStyles.entryText}>{entry}</Text>
               <View style={localStyles.hr} />
               <View style={localStyles.entryFooter}>
