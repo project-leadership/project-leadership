@@ -179,6 +179,7 @@ const NotesPage = ({ navigateTo, deleteEntry, savedEntry, setSavedEntry }) => {
         ) : (
           <Text style={localStyles.noEntryText}>No matching entries found.</Text>
         )}
+        <View style={{ height: 60 }} />
       </View>
 
       {/* Modal */}
