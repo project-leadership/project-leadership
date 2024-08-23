@@ -25,6 +25,7 @@ import styles from "./screens/styles";
 import { BlurView } from "expo-blur";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Haptics from "expo-haptics";
+import TruncateText from "./components/TruncateText";
 
 const { width, height } = Dimensions.get("window");
 
@@ -78,7 +79,7 @@ export default function App() {
     try {
       const value = await AsyncStorage.getItem("journalEntry");
       const template = await AsyncStorage.getItem("entryTemplate");
-      console.log("Templates: " + template)
+      console.log("Templates: " + template);
       if (value !== null) {
         setSavedEntry(value);
       }
@@ -92,7 +93,7 @@ export default function App() {
   const saveData = async (entry, selectedEntryTemplate) => {
     try {
       const existingEntry = await AsyncStorage.getItem("journalEntry");
-      console.log("existingEntry " + existingEntry)
+      console.log("existingEntry " + existingEntry);
       const existingTemplates = await AsyncStorage.getItem("entryTemplate");
 
       const newEntry = existingEntry ? existingEntry + "\n\n" + entry : entry;
@@ -105,7 +106,7 @@ export default function App() {
       );
       console.log("Data appended successfully");
       retrieveData();
-      console.log("Templates: " + entryTemplate)
+      console.log("Templates: " + entryTemplate);
     } catch (error) {
       console.error("Error saving data", error);
     }
@@ -128,7 +129,7 @@ export default function App() {
       setEntryTemplate(newEntryTemplates);
 
       console.log("Entry deleted successfully");
-      console.log("Templates: " + entryTemplate)
+      console.log("Templates: " + entryTemplate);
     } catch (error) {
       console.error("Error deleting entry", error);
     }
@@ -195,7 +196,15 @@ export default function App() {
                   <Text style={localStyles.entryTemplate}>
                     {entryTemplate.split("\n\n")[index] || "Journal Entry"}
                   </Text>
-                  <Text style={localStyles.entryText}>{entry}</Text>
+                  <TruncateText
+                    style={localStyles.entryText}
+                    text={
+                      "entryaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                    }
+                    onThreeDotsPressed={(_, setHasToTruncate) => {
+                      setHasToTruncate(false);
+                    }}
+                  />
                   <View style={localStyles.hr} />
                   <View style={localStyles.entryFooter}>
                     <Text style={localStyles.entryDate}>
@@ -466,7 +475,7 @@ const localStyles = StyleSheet.create({
   },
   entryContainer: {
     marginTop: 20,
-    width: width * 0.86,
+    width: width * 0.9,
     padding: 15,
     backgroundColor: "white",
     borderRadius: 10,
