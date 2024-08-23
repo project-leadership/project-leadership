@@ -244,6 +244,7 @@ export default function App() {
             ) : (
               <Text style={localStyles.entryText}>No saved entry found.</Text>
             )}
+            <View style={{ height: 60 }} />
           </View>
         </Animated.ScrollView>
       );
