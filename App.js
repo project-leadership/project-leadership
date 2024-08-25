@@ -11,7 +11,7 @@ import {
   Animated,
   Dimensions,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import NotesPage from "./screens/NotesPage";
 import CoursePage from "./screens/CoursePage";
@@ -26,6 +26,8 @@ import { BlurView } from "expo-blur";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Haptics from "expo-haptics";
 import TruncateText from "./components/TruncateText";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Swipeable from "react-native-gesture-handler/Swipeable";
 
 const { width, height } = Dimensions.get("window");
 
@@ -45,28 +47,21 @@ export default function App() {
     outputRange: [100, 100],
     extrapolate: "clamp",
   });
-
   const headerPosition = scrollY.interpolate({
     inputRange: [0, 100],
     outputRange: [0, -40],
     extrapolate: "clamp",
   });
-
   const headerFontSize = scrollY.interpolate({
     inputRange: [0, 100],
     outputRange: [30, 17],
     extrapolate: "clamp",
   });
-
   const fabOptions = [
     { icon: "book", label: "Write Principle" },
     { icon: "alert-circle", label: "Pain Button" },
     { icon: "message-circle", label: "Crucial Conversations" },
   ];
-
-  useEffect(() => {
-    retrieveData();
-  }, [currentPage]);
 
   // When the fab is open
   useEffect(() => {
@@ -74,6 +69,10 @@ export default function App() {
       Haptics.selectionAsync();
     }
   }, [isFabOpen]);
+
+  useEffect(() => {
+    retrieveData();
+  }, [currentPage]);
 
   const retrieveData = async () => {
     try {
@@ -186,60 +185,90 @@ export default function App() {
           <View style={localStyles.entries}>
             {savedEntry ? (
               savedEntry.split("\n\n").map((entry, index) => (
-                <View
+                <Swipeable
                   key={index}
-                  style={[
-                    localStyles.entryContainer,
-                    { alignSelf: showPopup ? "center" : undefined },
-                  ]}
+                  contentContainerStyle={{ width: "100%" }}
+                  renderRightActions={() => {
+                    return (
+                      <View
+                        style={{ flexDirection: "row", alignItems: "center" }}
+                      >
+                        <View style={[localStyles.actionEntry, { backgroundColor: "#1ac2e8" }]}>
+                          <FontAwesome
+                            name="pencil"
+                            size={45}
+                            color="white"
+                          />
+                        </View>
+                        <View style={[localStyles.actionEntry, { backgroundColor: "#db4050" }]}>
+                          <FontAwesome name="trash" size={45} color="white" />
+                        </View>
+                      </View>
+                    );
+                  }}
+                  renderLeftActions={() => {
+                    return (
+                      <View
+                        style={{ flexDirection: "row", alignItems: "center" }}
+                      >
+                        <View style={[localStyles.actionEntry, { backgroundColor: "#db4040" }]}>
+                          <FontAwesome name="bookmark-o" size={45} color="white" />
+                        </View>
+                      </View>
+                    );
+                  }}
                 >
-                  <Text style={localStyles.entryTemplate}>
-                    {entryTemplate.split("\n\n")[index] || "Journal Entry"}
-                  </Text>
-                  <TruncateText
-                    style={localStyles.entryText}
-                    text={entry}
-                    onThreeDotsPressed={(_, setHasToTruncate) => {
-                      setHasToTruncate(false);
-                    }}
-                  />
-                  <View style={localStyles.hr} />
-                  <View style={localStyles.entryFooter}>
-                    <Text style={localStyles.entryDate}>
-                      {new Date().toLocaleDateString()}
+                  <View style={localStyles.entryContainer}>
+                    <Text style={localStyles.entryTemplate}>
+                      {entryTemplate.split("\n\n")[index] || "Journal Entry"}
                     </Text>
-                    <TouchableOpacity onPress={() => toggleMoreOptions(index)}>
-                      <Feather
-                        name="more-horizontal"
-                        size={16}
-                        color="#333"
-                        style={localStyles.moreIcon}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                  {moreOptionsVisible === index && (
-                    <View style={localStyles.optionsContainer}>
+                    <TruncateText
+                      style={localStyles.entryText}
+                      text={entry}
+                      onThreeDotsPressed={(_, setHasToTruncate) => {
+                        setHasToTruncate(false);
+                      }}
+                    />
+                    <View style={localStyles.hr} />
+                    <View style={localStyles.entryFooter}>
+                      <Text style={localStyles.entryDate}>
+                        {new Date().toLocaleDateString()}
+                      </Text>
                       <TouchableOpacity
-                        style={localStyles.optionButton}
-                        onPress={() => console.log("Edit")}
+                        onPress={() => toggleMoreOptions(index)}
                       >
-                        <Text style={localStyles.optionText}>Edit</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={localStyles.optionButton}
-                        onPress={() => console.log("Bookmark")}
-                      >
-                        <Text style={localStyles.optionText}>Bookmark</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={localStyles.optionButton}
-                        onPress={() => deleteEntry(index)}
-                      >
-                        <Text style={localStyles.optionText}>Delete</Text>
+                        <Feather
+                          name="more-horizontal"
+                          size={16}
+                          color="#333"
+                          style={localStyles.moreIcon}
+                        />
                       </TouchableOpacity>
                     </View>
-                  )}
-                </View>
+                    {moreOptionsVisible === index && (
+                      <View style={localStyles.optionsContainer}>
+                        <TouchableOpacity
+                          style={localStyles.optionButton}
+                          onPress={() => console.log("Edit")}
+                        >
+                          <Text style={localStyles.optionText}>Edit</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={localStyles.optionButton}
+                          onPress={() => console.log("Bookmark")}
+                        >
+                          <Text style={localStyles.optionText}>Bookmark</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={localStyles.optionButton}
+                          onPress={() => deleteEntry(index)}
+                        >
+                          <Text style={localStyles.optionText}>Delete</Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </View>
+                </Swipeable>
               ))
             ) : (
               <Text style={localStyles.entryText}>No saved entry found.</Text>
@@ -274,146 +303,154 @@ export default function App() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {currentPage === "home" && (
-        <Animated.View
-          style={[
-            styles.header,
-            {
-              height: headerHeight,
-              transform: [{ translateY: headerPosition }],
-              position: "absolute",
-              left: -23,
-              right: 0,
-              zIndex: 1000,
-              backgroundColor: "#fafafa",
-            },
-          ]}
-        >
+    <GestureHandlerRootView>
+      <SafeAreaView style={styles.container}>
+        {currentPage === "home" && (
           <Animated.View
             style={[
-              styles.headerContent,
+              styles.header,
               {
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                paddingHorizontal: 20,
+                height: headerHeight,
+                transform: [{ translateY: headerPosition }],
+                position: "absolute",
+                left: -23,
+                right: 0,
+                zIndex: 1000,
+                backgroundColor: "#fafafa",
               },
             ]}
           >
-            <Animated.Text
+            <Animated.View
               style={[
-                styles.headerText,
-                { fontSize: headerFontSize, marginLeft: 20 },
+                styles.headerContent,
+                {
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  paddingHorizontal: 20,
+                },
               ]}
             >
-              Project Leadership
-            </Animated.Text>
-            <TouchableOpacity onPress={() => setShowOptions(!showOptions)}>
-              <View style={styles.hamburgerIcon}>
-                <Feather name="align-center" size={24} color="black" />
-              </View>
-            </TouchableOpacity>
-          </Animated.View>
-        </Animated.View>
-      )}
-
-      {renderContent()}
-
-      {currentPage === "home" && (
-        <>
-          <TouchableOpacity
-            style={styles.fab}
-            onPress={handleFabPress}
-            onLongPress={toggleFab}
-          >
-            <Feather name="edit" size={34} color="#ffffff" />
-          </TouchableOpacity>
-
-          {isFabOpen && (
-            <Modal transparent animationType="fade">
-              <BlurView intensity={50} style={localStyles.blurView}>
-                <TouchableOpacity
-                  style={localStyles.closeArea}
-                  onPress={toggleFab}
-                />
-
-                <View style={localStyles.fabOptionsContainer}>
-                  {fabOptions.map((option) => (
-                    <TouchableOpacity
-                      key={option.label}
-                      style={localStyles.fabOption}
-                      onPress={() =>
-                        navigateTo(option.label.toLowerCase().replace(" ", ""))
-                      }
-                    >
-                      <Feather
-                        name={option.icon}
-                        size={20}
-                        color="#393938"
-                        style={localStyles.fabOptionIcon}
-                      />
-                      <Text style={localStyles.fabOptionText}>
-                        {option.label}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
+              <Animated.Text
+                style={[
+                  styles.headerText,
+                  { fontSize: headerFontSize, marginLeft: 20 },
+                ]}
+              >
+                Project Leadership
+              </Animated.Text>
+              <TouchableOpacity onPress={() => setShowOptions(!showOptions)}>
+                <View style={styles.hamburgerIcon}>
+                  <Feather name="align-center" size={24} color="black" />
                 </View>
-              </BlurView>
-            </Modal>
-          )}
-        </>
-      )}
+              </TouchableOpacity>
+            </Animated.View>
+          </Animated.View>
+        )}
 
-      <View style={styles.bottomNav}>
-        <LinearGradient
-          colors={["rgba(250, 250, 250, 0)", "rgba(250, 250, 250, 0.9)"]}
-          style={styles.gradient}
-        />
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigateTo("home")}
-        >
-          <Feather
-            name="home"
-            size={24}
-            color={currentPage === "home" ? "#393938" : "grey"}
+        {renderContent()}
+
+        {currentPage === "home" && (
+          <>
+            <TouchableOpacity
+              style={styles.fab}
+              onPress={handleFabPress}
+              onLongPress={toggleFab}
+            >
+              <Feather name="edit" size={34} color="#ffffff" />
+            </TouchableOpacity>
+
+            {isFabOpen && (
+              <Modal transparent animationType="fade">
+                <BlurView intensity={50} style={localStyles.blurView}>
+                  <TouchableOpacity
+                    style={localStyles.closeArea}
+                    onPress={toggleFab}
+                  />
+
+                  <View style={localStyles.fabOptionsContainer}>
+                    {fabOptions.map((option) => (
+                      <TouchableOpacity
+                        key={option.label}
+                        style={localStyles.fabOption}
+                        onPress={() =>
+                          navigateTo(
+                            option.label.toLowerCase().replace(" ", "")
+                          )
+                        }
+                      >
+                        <Feather
+                          name={option.icon}
+                          size={20}
+                          color="#393938"
+                          style={localStyles.fabOptionIcon}
+                        />
+                        <Text style={localStyles.fabOptionText}>
+                          {option.label}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </BlurView>
+              </Modal>
+            )}
+          </>
+        )}
+
+        <View style={styles.bottomNav}>
+          <LinearGradient
+            colors={["rgba(250, 250, 250, 0)", "rgba(250, 250, 250, 0.9)"]}
+            style={styles.gradient}
           />
-          <Text style={{ color: currentPage === "home" ? "#393938" : "grey" }}>
-            Home
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigateTo("course")}
-        >
-          <Feather
-            name="book-open"
-            size={24}
-            color={currentPage === "course" ? "#393938" : "grey"}
-          />
-          <Text
-            style={{ color: currentPage === "course" ? "#393938" : "grey" }}
+          <TouchableOpacity
+            style={styles.navItem}
+            onPress={() => navigateTo("home")}
           >
-            Course
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigateTo("notes")}
-        >
-          <Feather
-            name="book"
-            size={24}
-            color={currentPage === "notes" ? "#393938" : "grey"}
-          />
-          <Text style={{ color: currentPage === "notes" ? "#393938" : "grey" }}>
-            Notes
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <StatusBar style="auto" />
-    </SafeAreaView>
+            <Feather
+              name="home"
+              size={24}
+              color={currentPage === "home" ? "#393938" : "grey"}
+            />
+            <Text
+              style={{ color: currentPage === "home" ? "#393938" : "grey" }}
+            >
+              Home
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.navItem}
+            onPress={() => navigateTo("course")}
+          >
+            <Feather
+              name="book-open"
+              size={24}
+              color={currentPage === "course" ? "#393938" : "grey"}
+            />
+            <Text
+              style={{ color: currentPage === "course" ? "#393938" : "grey" }}
+            >
+              Course
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.navItem}
+            onPress={() => navigateTo("notes")}
+          >
+            <Feather
+              name="book"
+              size={24}
+              color={currentPage === "notes" ? "#393938" : "grey"}
+            />
+            <Text
+              style={{ color: currentPage === "notes" ? "#393938" : "grey" }}
+            >
+              Notes
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <StatusBar style="auto" />
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }
 
@@ -516,7 +553,27 @@ const localStyles = StyleSheet.create({
   },
   entries: {
     justifyContent: "center",
-    width: "95%",
+    width: "100%",
     paddingBottom: 2,
+  },
+  actionEntry: {
+    borderRadius: 70 / 2,
+    backgroundColor: "white",
+    padding: 15,
+    margin: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+
+    alignItems: "center",
+    justifyContent: "center",
+    width: 70,
+    height: 70,
   },
 });
