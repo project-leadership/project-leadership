@@ -28,6 +28,7 @@ import * as Haptics from "expo-haptics";
 import TruncateText from "./components/TruncateText";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
+import CustomDropDownMenu from "./components/CustomDropDownMenu";
 
 const { width, height } = Dimensions.get("window");
 
@@ -37,7 +38,7 @@ export default function App() {
   const [isFabOpen, setFabOpen] = useState(false);
   const [savedEntry, setSavedEntry] = useState("");
   const [showOptions, setShowOptions] = useState(false);
-  const [moreOptionsVisible, setMoreOptionsVisible] = useState(null);
+  // const [moreOptionsVisible, setMoreOptionsVisible] = useState(null);
   const [entryTemplate, setEntryTemplate] = useState("");
 
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -119,7 +120,6 @@ export default function App() {
       const newSavedEntry = entries.join("\n\n");
       await AsyncStorage.setItem("journalEntry", newSavedEntry);
       setSavedEntry(newSavedEntry);
-      setMoreOptionsVisible(null);
 
       const templates = entryTemplate.split("\n\n");
       templates.splice(index, 1);
@@ -137,7 +137,6 @@ export default function App() {
   const navigateTo = (page) => {
     setCurrentPage(page);
     setFabOpen(false);
-    setMoreOptionsVisible(null);
   };
 
   const handleFabPress = () => {
@@ -193,14 +192,20 @@ export default function App() {
                       <View
                         style={{ flexDirection: "row", alignItems: "center" }}
                       >
-                        <View style={[localStyles.actionEntry, { backgroundColor: "#1ac2e8" }]}>
-                          <FontAwesome
-                            name="pencil"
-                            size={45}
-                            color="white"
-                          />
+                        <View
+                          style={[
+                            localStyles.actionEntry,
+                            { backgroundColor: "#1ac2e8" },
+                          ]}
+                        >
+                          <FontAwesome name="pencil" size={45} color="white" />
                         </View>
-                        <View style={[localStyles.actionEntry, { backgroundColor: "#db4050" }]}>
+                        <View
+                          style={[
+                            localStyles.actionEntry,
+                            { backgroundColor: "#db4050" },
+                          ]}
+                        >
                           <FontAwesome name="trash" size={45} color="white" />
                         </View>
                       </View>
@@ -211,8 +216,17 @@ export default function App() {
                       <View
                         style={{ flexDirection: "row", alignItems: "center" }}
                       >
-                        <View style={[localStyles.actionEntry, { backgroundColor: "#db4040" }]}>
-                          <FontAwesome name="bookmark-o" size={45} color="white" />
+                        <View
+                          style={[
+                            localStyles.actionEntry,
+                            { backgroundColor: "#db4040" },
+                          ]}
+                        >
+                          <FontAwesome
+                            name="bookmark-o"
+                            size={45}
+                            color="white"
+                          />
                         </View>
                       </View>
                     );
@@ -234,18 +248,28 @@ export default function App() {
                       <Text style={localStyles.entryDate}>
                         {new Date().toLocaleDateString()}
                       </Text>
-                      <TouchableOpacity
-                        onPress={() => toggleMoreOptions(index)}
-                      >
-                        <Feather
-                          name="more-horizontal"
-                          size={16}
-                          color="#333"
-                          style={localStyles.moreIcon}
-                        />
-                      </TouchableOpacity>
+                      <CustomDropDownMenu
+                        Icon={() => {
+                          return (
+                            <Feather
+                              name="more-horizontal"
+                              size={16}
+                              color="#333"
+                              style={localStyles.moreIcon}
+                            />
+                          );
+                        }}
+                        items={[
+                          { name: "Edit", onPress: () => console.log("Edit") },
+                          {
+                            name: "Bookmark",
+                            onPress: () => console.log("Bookmark"),
+                          },
+                          { name: "Delete", onPress: () => deleteEntry(index) },
+                        ]}
+                      />
                     </View>
-                    {moreOptionsVisible === index && (
+                    {/* {moreOptionsVisible === index && (
                       <View style={localStyles.optionsContainer}>
                         <TouchableOpacity
                           style={localStyles.optionButton}
@@ -266,7 +290,7 @@ export default function App() {
                           <Text style={localStyles.optionText}>Delete</Text>
                         </TouchableOpacity>
                       </View>
-                    )}
+                    )} */}
                   </View>
                 </Swipeable>
               ))
