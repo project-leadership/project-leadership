@@ -1,49 +1,56 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, Modal, TouchableOpacity } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import HomeworkModalPage from './HomeworkModalPage';
-import QuoteModalPage from './QuoteModalPage';
-import SettingsModalPage from './SettingsModalPage';
-import RecentNotesModalPage from './RecentNotesModalPage';
+import React, { useRef } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { Feather } from "@expo/vector-icons";
+import HomeworkModalPage from "./HomeworkModalPage";
+import QuoteModalPage from "./QuoteModalPage";
+import SettingsModalPage from "./SettingsModalPage";
+import RecentNotesModalPage from "./RecentNotesModalPage";
+import ProfileModalPage from "./ProfileModalPage";
 
 const continueItems = [
   {
     title: "Introduction",
     author: "Unknown Author",
     progress: "PDF • 3%",
-    image: require('../assets/peter.jpg'),
+    image: require("../assets/peter.jpg"),
     backgroundColor: "#FDEDEC",
   },
   {
     title: "crucial conv",
     author: "Robert W. Straver",
     progress: "PDF • 5%",
-    image: require('../assets/crucial.jpg'),
+    image: require("../assets/crucial.jpg"),
     backgroundColor: "#E8F8F5",
   },
   {
     title: "how to ",
     author: "John Doe",
     progress: "PDF • 10%",
-    image: require('../assets/madetostick.jpg'),
+    image: require("../assets/madetostick.jpg"),
     backgroundColor: "#FEF9E7",
   },
 ];
 
 const NotesPage = () => {
-  const [profileModalVisible, setProfileModalVisible] = useState(false);
-
   const homeworkPage = useRef(null);
   const quotePage = useRef(null);
   const settingsPage = useRef(null);
-  const recentNotesPage = useState(null);
+  const recentNotesPage = useRef(null);
+  const profilePage = useRef(null);
 
   return (
     <ScrollView style={styles.container}>
       {/* Header Section */}
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Welcome User</Text>
-        <TouchableOpacity onPress={() => setProfileModalVisible(true)}>
+        <TouchableOpacity onPress={() => profilePage.current.setVisible(true)}>
           <View style={styles.progressContainer}>
             <View style={styles.progressCircle}>
               <View style={styles.progressArc} />
@@ -51,7 +58,7 @@ const NotesPage = () => {
               <Text style={styles.progressTotal}>/ 5</Text>
             </View>
             <Image
-              source={require('../assets/profile.png')}
+              source={require("../assets/profile.png")}
               style={styles.avatar}
             />
           </View>
@@ -62,7 +69,13 @@ const NotesPage = () => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.continueList}>
           {continueItems.map((item, index) => (
-            <View key={index} style={[styles.continueItem, { backgroundColor: item.backgroundColor }]}>
+            <View
+              key={index}
+              style={[
+                styles.continueItem,
+                { backgroundColor: item.backgroundColor },
+              ]}
+            >
               <Image source={item.image} style={styles.bookCover} />
               <View style={styles.continueDetails}>
                 <Text style={styles.bookTitle}>{item.title}</Text>
@@ -79,7 +92,9 @@ const NotesPage = () => {
         <View style={styles.quoteSection}>
           <View style={styles.quoteContainer}>
             <Text style={styles.quoteTitle}>Quote of the Day</Text>
-            <Text style={styles.quoteText}>"Pain + Reflection = Progress" - Ray Dalio</Text>
+            <Text style={styles.quoteText}>
+              "Pain + Reflection = Progress" - Ray Dalio
+            </Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -105,8 +120,16 @@ const NotesPage = () => {
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Settings</Text>
           <View style={styles.settingsSubHeaderContainer}>
-            <Text style={styles.subHeader}>Manage your Account and Preferences, Get Help, and More...</Text>
-            <Feather name="settings" size={45} marginRight={-35} color="black" style={styles.settingsIcon} />
+            <Text style={styles.subHeader}>
+              Manage your Account and Preferences, Get Help, and More...
+            </Text>
+            <Feather
+              name="settings"
+              size={45}
+              marginRight={-35}
+              color="black"
+              style={styles.settingsIcon}
+            />
           </View>
         </View>
       </TouchableOpacity>
@@ -118,13 +141,17 @@ const NotesPage = () => {
       <TouchableOpacity onPress={() => homeworkPage.current.setVisible(true)}>
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Homework</Text>
-          <Text style={styles.homeworkText}>Read Chapter 1 of "Principles" by Ray Dalio</Text>
+          <Text style={styles.homeworkText}>
+            Read Chapter 1 of "Principles" by Ray Dalio
+          </Text>
         </View>
       </TouchableOpacity>
 
       {/* New Section: Recent Notes */}
       <View style={styles.hr} />
-      <TouchableOpacity onPress={() => recentNotesPage.current.setVisible(true)}>
+      <TouchableOpacity
+        onPress={() => recentNotesPage.current.setVisible(true)}
+      >
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Recent Notes</Text>
           <View style={styles.recentNotesContainer}>
@@ -132,14 +159,18 @@ const NotesPage = () => {
               <Feather name="file-text" size={24} color="#4A90E2" />
               <View style={styles.recentNoteDetails}>
                 <Text style={styles.recentNoteTitle}>Chapter 1 Summary</Text>
-                <Text style={styles.recentNoteDate}>Last edited: 2 days ago</Text>
+                <Text style={styles.recentNoteDate}>
+                  Last edited: 2 days ago
+                </Text>
               </View>
             </View>
             <View style={styles.recentNoteItem}>
               <Feather name="file-text" size={24} color="#4A90E2" />
               <View style={styles.recentNoteDetails}>
                 <Text style={styles.recentNoteTitle}>Key Concepts</Text>
-                <Text style={styles.recentNoteDate}>Last edited: 1 week ago</Text>
+                <Text style={styles.recentNoteDate}>
+                  Last edited: 1 week ago
+                </Text>
               </View>
             </View>
           </View>
@@ -155,20 +186,8 @@ const NotesPage = () => {
       <HomeworkModalPage ref={homeworkPage} />
 
       <RecentNotesModalPage ref={recentNotesPage} />
-      
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={profileModalVisible}
-        onRequestClose={() => setProfileModalVisible(false)}
-      >
-        <View style={styles.modalView}>
-          <Text>Profile Modal Content</Text>
-          <TouchableOpacity onPress={() => setProfileModalVisible(false)}>
-            <Text>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+
+      <ProfileModalPage ref={profilePage}/>
     </ScrollView>
   );
 };
@@ -176,47 +195,47 @@ const NotesPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fafafa',
+    backgroundColor: "#fafafa",
   },
   headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 24,
-    backgroundColor: '#fafafa',
+    backgroundColor: "#fafafa",
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   progressContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   progressCircle: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     width: 40,
     height: 40,
     marginRight: 16,
-    position: 'relative',
+    position: "relative",
   },
   progressArc: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     width: 40,
     height: 40,
     borderWidth: 3,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 20,
-    borderBottomColor: 'transparent',
-    transform: [{ rotate: '360deg' }],
+    borderBottomColor: "transparent",
+    transform: [{ rotate: "360deg" }],
   },
   progressText: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   progressTotal: {
     fontSize: 10,
@@ -227,11 +246,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   continueList: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   continueItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 16,
     marginHorizontal: 8,
     borderRadius: 8,
@@ -240,7 +259,7 @@ const styles = StyleSheet.create({
   bookCover: {
     width: 40,
     height: 60,
-    resizeMode: 'cover',
+    resizeMode: "cover",
     marginRight: 16,
   },
   continueDetails: {
@@ -248,23 +267,23 @@ const styles = StyleSheet.create({
   },
   bookTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   bookAuthor: {
     fontSize: 14,
-    color: '#888',
+    color: "#888",
   },
   bookProgress: {
     fontSize: 12,
-    color: '#888',
+    color: "#888",
   },
   quoteSection: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     marginTop: 16,
   },
   quoteContainer: {
-    backgroundColor: '#393838',
+    backgroundColor: "#393838",
     padding: 16,
     height: 150,
     width: 340,
@@ -272,37 +291,37 @@ const styles = StyleSheet.create({
   },
   quoteTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 8,
-    color: 'white',
+    color: "white",
   },
   quoteText: {
     fontSize: 16,
-    fontStyle: 'italic',
-    color: 'white',
+    fontStyle: "italic",
+    color: "white",
   },
   iconContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
     paddingHorizontal: 16,
     marginTop: 16,
   },
   iconItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   iconLabel: {
     marginLeft: 4,
     fontSize: 14,
-    color: 'grey',
+    color: "grey",
   },
   openText: {
     fontSize: 14,
-    color: 'grey',
+    color: "grey",
   },
   sectionContainer: {
-    backgroundColor:'#fafafa',
+    backgroundColor: "#fafafa",
     padding: 16,
     marginTop: 16,
     marginHorizontal: 16,
@@ -310,17 +329,17 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   settingsSubHeaderContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 8,
     width: 280,
   },
   subHeader: {
     fontSize: 14,
-    color: 'grey',
+    color: "grey",
     flex: 1,
   },
   settingsIcon: {
@@ -332,7 +351,7 @@ const styles = StyleSheet.create({
   hr: {
     marginTop: 35,
     height: 1.5,
-    backgroundColor: '#ddd',
+    backgroundColor: "#ddd",
     marginVertical: 16,
     marginHorizontal: 16,
   },
@@ -340,8 +359,8 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   recentNoteItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 16,
   },
   recentNoteDetails: {
@@ -349,11 +368,11 @@ const styles = StyleSheet.create({
   },
   recentNoteTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   recentNoteDate: {
     fontSize: 14,
-    color: '#888',
+    color: "#888",
   },
   modalView: {
     margin: 20,
@@ -364,11 +383,11 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
 });
 
