@@ -4,6 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import HomeworkModalPage from './HomeworkModalPage';
 import QuoteModalPage from './QuoteModalPage';
 import SettingsModalPage from './SettingsModalPage';
+import RecentNotesModalPage from './RecentNotesModalPage';
 
 const continueItems = [
   {
@@ -30,12 +31,12 @@ const continueItems = [
 ];
 
 const NotesPage = () => {
-  const [recentNotesModalVisible, setRecentNotesModalVisible] = useState(false);
   const [profileModalVisible, setProfileModalVisible] = useState(false);
 
   const homeworkPage = useRef(null);
   const quotePage = useRef(null);
   const settingsPage = useRef(null);
+  const recentNotesPage = useState(null);
 
   return (
     <ScrollView style={styles.container}>
@@ -123,7 +124,7 @@ const NotesPage = () => {
 
       {/* New Section: Recent Notes */}
       <View style={styles.hr} />
-      <TouchableOpacity onPress={() => setRecentNotesModalVisible(true)}>
+      <TouchableOpacity onPress={() => recentNotesPage.current.setVisible(true)}>
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Recent Notes</Text>
           <View style={styles.recentNotesContainer}>
@@ -153,20 +154,8 @@ const NotesPage = () => {
 
       <HomeworkModalPage ref={homeworkPage} />
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={recentNotesModalVisible}
-        onRequestClose={() => setRecentNotesModalVisible(false)}
-      >
-        <View style={styles.modalView}>
-          <Text>Recent Notes Modal Content</Text>
-          <TouchableOpacity onPress={() => setRecentNotesModalVisible(false)}>
-            <Text>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-
+      <RecentNotesModalPage ref={recentNotesPage} />
+      
       <Modal
         animationType="slide"
         transparent={true}
