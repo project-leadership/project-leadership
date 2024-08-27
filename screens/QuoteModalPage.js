@@ -1,12 +1,12 @@
-import { Modal, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { forwardRef, useState } from "react";
 
-const HomeworkModalPage = forwardRef(({}, ref) => {
+const QuoteModalPage = forwardRef(({}, ref) => {
   const [visible, setVisible] = useState(false);
 
   ref.current = {
     setVisible,
-  }
+  };
 
   return (
     <Modal
@@ -16,7 +16,7 @@ const HomeworkModalPage = forwardRef(({}, ref) => {
       onRequestClose={() => setVisible(false)}
     >
       <View style={styles.modalView}>
-        <Text>Homework Modal Content</Text>
+        <Text>Quote Modal Content</Text>
         <TouchableOpacity onPress={() => setVisible(false)}>
           <Text>Close</Text>
         </TouchableOpacity>
@@ -25,22 +25,23 @@ const HomeworkModalPage = forwardRef(({}, ref) => {
   );
 });
 
-export default HomeworkModalPage;
+export default QuoteModalPage;
 
 const styles = StyleSheet.create({
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
+    modalView: {
+      margin: 20,
+      backgroundColor: "white",
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-});
+  });
+  

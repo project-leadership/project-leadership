@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, ScrollView, Modal, TouchableOpacity } fr
 import { Feather } from '@expo/vector-icons';
 import HomeworkModalPage from './HomeworkModalPage';
 import HomeworkPage from './HomeworkPage';
+import QuoteModalPage from './QuoteModalPage';
 
 const continueItems = [
   {
@@ -29,12 +30,12 @@ const continueItems = [
 ];
 
 const NotesPage = () => {
-  const [quoteModalVisible, setQuoteModalVisible] = useState(false);
   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
   const [recentNotesModalVisible, setRecentNotesModalVisible] = useState(false);
   const [profileModalVisible, setProfileModalVisible] = useState(false);
 
   const homeworkPage = useRef(null);
+  const quotePage = useRef(null);
 
   return (
     <ScrollView style={styles.container}>
@@ -73,7 +74,7 @@ const NotesPage = () => {
       </ScrollView>
 
       {/* Quote Container */}
-      <TouchableOpacity onPress={() => setQuoteModalVisible(true)}>
+      <TouchableOpacity onPress={() => quotePage.current.setVisible(true)}>
         <View style={styles.quoteSection}>
           <View style={styles.quoteContainer}>
             <Text style={styles.quoteTitle}>Quote of the Day</Text>
@@ -145,19 +146,8 @@ const NotesPage = () => {
       </TouchableOpacity>
 
       {/* Modal components */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={quoteModalVisible}
-        onRequestClose={() => setQuoteModalVisible(false)}
-      >
-        <View style={styles.modalView}>
-          <Text>Quote Modal Content</Text>
-          <TouchableOpacity onPress={() => setQuoteModalVisible(false)}>
-            <Text>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+
+      <QuoteModalPage ref={quotePage} />
 
       <Modal
         animationType="slide"
