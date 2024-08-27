@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, Modal, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import HomeworkModalPage from './HomeworkModalPage';
+import HomeworkPage from './HomeworkPage';
 
 const continueItems = [
   {
@@ -29,9 +31,10 @@ const continueItems = [
 const NotesPage = () => {
   const [quoteModalVisible, setQuoteModalVisible] = useState(false);
   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
-  const [homeworkModalVisible, setHomeworkModalVisible] = useState(false);
   const [recentNotesModalVisible, setRecentNotesModalVisible] = useState(false);
   const [profileModalVisible, setProfileModalVisible] = useState(false);
+
+  const homeworkPage = useRef(null);
 
   return (
     <ScrollView style={styles.container}>
@@ -110,7 +113,7 @@ const NotesPage = () => {
       <View style={styles.hr} />
 
       {/* Homework Section */}
-      <TouchableOpacity onPress={() => setHomeworkModalVisible(true)}>
+      <TouchableOpacity onPress={() => homeworkPage.current.setVisible(true)}>
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Homework</Text>
           <Text style={styles.homeworkText}>Read Chapter 1 of "Principles" by Ray Dalio</Text>
@@ -170,19 +173,7 @@ const NotesPage = () => {
         </View>
       </Modal>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={homeworkModalVisible}
-        onRequestClose={() => setHomeworkModalVisible(false)}
-      >
-        <View style={styles.modalView}>
-          <Text>Homework Modal Content</Text>
-          <TouchableOpacity onPress={() => setHomeworkModalVisible(false)}>
-            <Text>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+      <HomeworkModalPage ref={homeworkPage} />
 
       <Modal
         animationType="slide"
