@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, Modal, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import HomeworkModalPage from './HomeworkModalPage';
-import HomeworkPage from './HomeworkPage';
 import QuoteModalPage from './QuoteModalPage';
+import SettingsModalPage from './SettingsModalPage';
 
 const continueItems = [
   {
@@ -30,12 +30,12 @@ const continueItems = [
 ];
 
 const NotesPage = () => {
-  const [settingsModalVisible, setSettingsModalVisible] = useState(false);
   const [recentNotesModalVisible, setRecentNotesModalVisible] = useState(false);
   const [profileModalVisible, setProfileModalVisible] = useState(false);
 
   const homeworkPage = useRef(null);
   const quotePage = useRef(null);
+  const settingsPage = useRef(null);
 
   return (
     <ScrollView style={styles.container}>
@@ -100,7 +100,7 @@ const NotesPage = () => {
       <View style={styles.hr} />
 
       {/* Settings Section */}
-      <TouchableOpacity onPress={() => setSettingsModalVisible(true)}>
+      <TouchableOpacity onPress={() => settingsPage.current.setVisible(true)}>
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Settings</Text>
           <View style={styles.settingsSubHeaderContainer}>
@@ -149,19 +149,7 @@ const NotesPage = () => {
 
       <QuoteModalPage ref={quotePage} />
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={settingsModalVisible}
-        onRequestClose={() => setSettingsModalVisible(false)}
-      >
-        <View style={styles.modalView}>
-          <Text>Settings Modal Content</Text>
-          <TouchableOpacity onPress={() => setSettingsModalVisible(false)}>
-            <Text>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+      <SettingsModalPage ref={settingsPage} />
 
       <HomeworkModalPage ref={homeworkPage} />
 
