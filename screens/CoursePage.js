@@ -1,22 +1,25 @@
-
-  import React from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Animated, { FadeInDown, FadeInLeft, FadeInUp } from 'react-native-reanimated'
+
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+const EnteringAnimationFromLeft = FadeInLeft.duration(500);
+const EnteringAnimationFromBottom = FadeInDown.duration(500);
+const EnteringAnimationFromUp = FadeInUp.duration(500);
 
 export default function CoursePage() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* Header */}
-        <View style={styles.header}>
+        <Animated.View style={styles.header} entering={EnteringAnimationFromUp}>
           <Text style={styles.greeting}>Hello, User</Text>
           <Ionicons name="person-circle-outline" size={36} color="#333" />
-        </View>
-
-       
+        </Animated.View>
 
         {/* Search Bar */}
-        <View style={styles.searchBar}>
+        <Animated.View style={styles.searchBar} entering={EnteringAnimationFromLeft}>
           <TextInput 
             style={styles.searchInput}
             placeholder="Search what you need"
@@ -25,11 +28,11 @@ export default function CoursePage() {
           <TouchableOpacity style={styles.searchButton}>
             <Ionicons name="search" size={20} color="#FFF" />
           </TouchableOpacity>
-        </View>
+        </Animated.View>
 
         {/* Continue Course Card */}
-        <Text style={styles.continueYourCourse}>Start with our Intro-Course</Text>
-        <TouchableOpacity style={styles.continueCard}>
+        <Animated.Text style={styles.continueYourCourse} entering={EnteringAnimationFromLeft}>Start with our Intro-Course</Animated.Text>
+        <AnimatedTouchableOpacity style={styles.continueCard} entering={EnteringAnimationFromLeft}>
           <View style={styles.continueCardContent}>
             <View style={{ flex: 1 }}>
               <Text style={styles.cardTitle}>To be a professional communicator!</Text>
@@ -44,27 +47,27 @@ export default function CoursePage() {
               style={styles.scooterImage}
             />
           </View>
-        </TouchableOpacity>
+        </AnimatedTouchableOpacity>
 
         {/* Top Courses */}
-        <Text style={styles.sectionTitle}>Our Courses</Text>
+        <Animated.Text style={styles.sectionTitle} entering={EnteringAnimationFromLeft}>Our Courses</Animated.Text>
         <View style={styles.courseCards}>
-          <TouchableOpacity style={[styles.courseCard, styles.marketingCard]}>
+          <AnimatedTouchableOpacity style={[styles.courseCard, styles.marketingCard]} entering={EnteringAnimationFromBottom}>
             <Text style={styles.courseCardTitle}>Dale Carnegie</Text>
             <Text style={styles.courseCount}>27 Courses</Text>
             <Image 
               source={{ uri: 'https://path-to-your-image/marketing-icon.png' }} 
               style={styles.courseImage} 
             />
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.courseCard, styles.designCard]}>
+          </AnimatedTouchableOpacity>
+          <AnimatedTouchableOpacity style={[styles.courseCard, styles.designCard]} entering={EnteringAnimationFromBottom}>
             <Text style={styles.courseCardTitle}>How to manage oneself</Text>
             <Text style={styles.courseCount}>41 Courses</Text>
             <Image 
               source={{ uri: 'https://path-to-your-image/design-icon.png' }} 
               style={styles.courseImage} 
             />
-          </TouchableOpacity>
+          </AnimatedTouchableOpacity>
          
         </View>
       </ScrollView>

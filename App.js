@@ -147,9 +147,9 @@ export default function App() {
     setFabOpen(!isFabOpen);
   };
 
-  const toggleMoreOptions = (index) => {
-    setMoreOptionsVisible(moreOptionsVisible === index ? null : index);
-  };
+  // const toggleMoreOptions = (index) => {
+  //   setMoreOptionsVisible(moreOptionsVisible === index ? null : index);
+  // };
 
   const renderContent = () => {
     if (currentPage === "home") {
