@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
-  Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Animated, {
@@ -16,8 +15,7 @@ import Animated, {
   FadeInLeft,
   FadeInUp,
 } from "react-native-reanimated";
-
-const { width, height } = Dimensions.get("window");
+import ProfileModalPage from "./ProfileModalPage";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
@@ -28,13 +26,15 @@ const EnteringAnimationFromBottom = FadeInDown.duration(500);
 const EnteringAnimationFromUp = FadeInUp.duration(500);
 
 export default function CoursePage() {
+  const profilePage = useRef(null);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* Header */}
         <Animated.View style={styles.header} entering={EnteringAnimationFromUp}>
           <Text style={styles.greeting}>Hello, User</Text>
-          <Ionicons name="person-circle-outline" size={36} color="#333" />
+          <Ionicons name="person-circle-outline" size={36} color="#333" onPress={() => profilePage.current.setVisible(true)} />
         </Animated.View>
 
         {/* Search Bar */}
@@ -115,6 +115,11 @@ export default function CoursePage() {
           </AnimatedTouchableOpacity>
         </View>
       </ScrollView>
+
+      {/*Modals*/}
+
+      <ProfileModalPage ref={profilePage} />
+
     </SafeAreaView>
   );
 }
