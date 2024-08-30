@@ -544,8 +544,7 @@ const localStyles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 6,
     elevation: 2,
-    borderColor: "#999999",
-    borderWidth: 1,
+    marginBottom: 2,
     justifyContent: "center",
   },
   entryTemplate: {
