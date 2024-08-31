@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -19,14 +19,36 @@ import ProfileModalPage from "./ProfileModalPage";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
-;
-
 const EnteringAnimationFromLeft = FadeInLeft.duration(500);
 const EnteringAnimationFromBottom = FadeInDown.duration(500);
 const EnteringAnimationFromUp = FadeInUp.duration(500);
 
 export default function CoursePage() {
   const profilePage = useRef(null);
+  const [searched, setSearched] = useState();
+
+  const courses = [
+    {
+      title: "Dale Carnegie",
+      number: 27,
+      addedStyle: styles.marketingCard,
+      type: "marketing",
+    },
+    {
+      title: "How to manage oneself",
+      number: 41,
+      addedStyle: styles.designCard,
+      type: "design",
+    },
+  ];
+
+  const isCourseSearched = (item) => {
+    if (searched) {
+      return item.title.includes(searched);
+    }
+
+    return true;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -34,7 +56,12 @@ export default function CoursePage() {
         {/* Header */}
         <Animated.View style={styles.header} entering={EnteringAnimationFromUp}>
           <Text style={styles.greeting}>Hello, User</Text>
-          <Ionicons name="person-circle-outline" size={36} color="#333" onPress={() => profilePage.current.setVisible(true)} />
+          <Ionicons
+            name="person-circle-outline"
+            size={36}
+            color="#333"
+            onPress={() => profilePage.current.setVisible(true)}
+          />
         </Animated.View>
 
         {/* Search Bar */}
@@ -46,8 +73,15 @@ export default function CoursePage() {
             style={styles.searchInput}
             placeholder="Search what you need"
             placeholderTextColor="#888"
+            onChangeText={setSearched}
+            value={searched}
           />
-          <TouchableOpacity style={styles.searchButton}>
+          <TouchableOpacity
+            style={styles.searchButton}
+            onPress={() => {
+              /* I don't know what put here */
+            }}
+          >
             <Ionicons name="search" size={25} color="#FFF" />
           </TouchableOpacity>
         </Animated.View>
@@ -91,35 +125,30 @@ export default function CoursePage() {
           Our Courses
         </Animated.Text>
         <View style={styles.courseCards}>
-          <AnimatedTouchableOpacity
-            style={[styles.courseCard, styles.marketingCard]}
-            entering={EnteringAnimationFromBottom}
-          >
-            <Text style={styles.courseCardTitle}>Dale Carnegie</Text>
-            <Text style={styles.courseCount}>27 Courses</Text>
-            <Image
-              source={{ uri: "https://path-to-your-image/marketing-icon.png" }}
-              style={styles.courseImage}
-            />
-          </AnimatedTouchableOpacity>
-          <AnimatedTouchableOpacity
-            style={[styles.courseCard, styles.designCard]}
-            entering={EnteringAnimationFromBottom}
-          >
-            <Text style={styles.courseCardTitle}>How to manage oneself</Text>
-            <Text style={styles.courseCount}>41 Courses</Text>
-            <Image
-              source={{ uri: "https://path-to-your-image/design-icon.png" }}
-              style={styles.courseImage}
-            />
-          </AnimatedTouchableOpacity>
+          {courses.filter(isCourseSearched).map((item, index) => {
+            return (
+              <AnimatedTouchableOpacity
+                entering={EnteringAnimationFromBottom}
+                key={index}
+                style={[styles.courseCard, item.addedStyle]}
+              >
+                <Text style={styles.courseCardTitle}>{item.title}</Text>
+                <Text style={styles.courseCount}>{item.number} Courses</Text>
+                <Image
+                  source={{
+                    uri: `https://path-to-your-image/${item.type}-icon.png`,
+                  }}
+                  style={styles.courseImage}
+                />
+              </AnimatedTouchableOpacity>
+            );
+          })}
         </View>
       </ScrollView>
 
       {/*Modals*/}
 
       <ProfileModalPage ref={profilePage} />
-
     </SafeAreaView>
   );
 }
