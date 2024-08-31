@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("window");
 
@@ -27,8 +26,6 @@ const JournalPage = ({ navigation, saveData }) => {
   const [entryTemplates, setEntryTemplates] = useState("");
   const fabAnimation = useRef(new Animated.Value(0)).current;
   const categoryBarAnimation = useRef(new Animated.Value(0)).current // X Position of black bar
-
-  const safeAreaViewInsets = useSafeAreaInsets();
 
   const categories = ["Recommended", "Recent"];
   const recommendedTemplates = ["Template A", "Template B", "Template C"];
@@ -181,7 +178,7 @@ const JournalPage = ({ navigation, saveData }) => {
       </View>
 
       {selectedCategory === "Recommended" && (
-        <View style={[styles.textAlignIconContainer, { top: safeAreaViewInsets.top + 50 }]}>
+        <View style={styles.textAlignIconContainer}>
           <Feather name="align-center" size={24} color="#393938" />
         </View>
       )}
@@ -306,8 +303,6 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 5,
     width: 45,
-    position: "absolute",
-    right: 10, 
   },
   scrollContainer: {
     flexGrow: 1,

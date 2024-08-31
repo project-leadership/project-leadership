@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Feather'; // Import Feather icons
 
 const SettingsPage = () => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.headerContainer}>
           <View style={styles.header}>
@@ -64,7 +64,7 @@ const SettingsPage = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({

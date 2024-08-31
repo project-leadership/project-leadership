@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,95 +8,62 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  Dimensions,
+  Modal,
+  Pressable,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import Animated, {
-  FadeInDown,
-  FadeInLeft,
-  FadeInUp,
-} from "react-native-reanimated";
-import ProfileModalPage from "./ProfileModalPage";
+import { Feather } from "react-native-vector-icons";
+import { LineChart } from "react-native-chart-kit"; // Import chart library
+import Animated from "react-native-reanimated";
 
-const AnimatedTouchableOpacity =
-  Animated.createAnimatedComponent(TouchableOpacity);
-const EnteringAnimationFromLeft = FadeInLeft.duration(500);
-const EnteringAnimationFromBottom = FadeInDown.duration(500);
-const EnteringAnimationFromUp = FadeInUp.duration(500);
+const { width } = Dimensions.get("window");
 
 export default function CoursePage() {
-  const profilePage = useRef(null);
-  const [searched, setSearched] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const courses = [
-    {
-      title: "Dale Carnegie",
-      number: 27,
-      addedStyle: styles.marketingCard,
-      type: "marketing",
-    },
-    {
-      title: "How to manage oneself",
-      number: 41,
-      addedStyle: styles.designCard,
-      type: "design",
-    },
-  ];
-
-  const isCourseSearched = (item) => {
-    if (searched) {
-      return item.title.includes(searched);
-    }
-
-    return true;
+  // Dummy data for the chart
+  const chartData = {
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    datasets: [
+      {
+        data: [10, 20, 12, 15, 22, 10, 18],
+        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // Chart line color
+        strokeWidth: 2, // Line thickness
+      },
+    ],
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* Header */}
-        <Animated.View style={styles.header} entering={EnteringAnimationFromUp}>
-          <Text style={styles.greeting}>Hello, User</Text>
-          <Ionicons
-            name="person-circle-outline"
-            size={36}
-            color="#333"
-            onPress={() => profilePage.current.setVisible(true)}
-          />
+        <Animated.View style={styles.header}>
+          <Text style={styles.greeting}>Courses</Text>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <View style={styles.progressContainer}>
+              <View style={styles.progressCircle}>
+                <View style={styles.progressArc} />
+                <Text style={styles.progressText}>0</Text>
+                <Text style={styles.progressTotal}>/ 5</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
         </Animated.View>
 
         {/* Search Bar */}
-        <Animated.View
-          style={styles.searchBar}
-          entering={EnteringAnimationFromLeft}
-        >
+        <View style={styles.searchBar}>
           <TextInput
             style={styles.searchInput}
             placeholder="Search what you need"
             placeholderTextColor="#888"
-            onChangeText={setSearched}
-            value={searched}
           />
-          <TouchableOpacity
-            style={styles.searchButton}
-            onPress={() => {
-              /* I don't know what put here */
-            }}
-          >
-            <Ionicons name="search" size={25} color="#FFF" />
+          <TouchableOpacity style={styles.searchButton}>
+            <Feather name="search" size={25} color="#FFF" />
           </TouchableOpacity>
-        </Animated.View>
+        </View>
 
         {/* Continue Course Card */}
-        <Animated.Text
-          style={styles.continueYourCourse}
-          entering={EnteringAnimationFromLeft}
-        >
-          Start with our Intro-Course
-        </Animated.Text>
-        <AnimatedTouchableOpacity
-          style={styles.continueCard}
-          entering={EnteringAnimationFromLeft}
-        >
+        <Animated.View style={styles.continueCard}>
           <View style={styles.continueCardContent}>
             <View style={{ flex: 1 }}>
               <Text style={styles.cardTitle}>
@@ -106,7 +73,7 @@ export default function CoursePage() {
                 Sharpen your skills in new markets
               </Text>
               <View style={styles.lessonIndicator}>
-                <Ionicons name="play-circle" size={18} color="#333" />
+                <Feather name="play-circle" size={18} color="#333" />
                 <Text style={styles.lessonText}>Lesson 3</Text>
               </View>
             </View>
@@ -115,40 +82,115 @@ export default function CoursePage() {
               style={styles.scooterImage}
             />
           </View>
-        </AnimatedTouchableOpacity>
+        </Animated.View>
 
         {/* Top Courses */}
-        <Animated.Text
-          style={styles.sectionTitle}
-          entering={EnteringAnimationFromLeft}
-        >
-          Our Courses
-        </Animated.Text>
         <View style={styles.courseCards}>
-          {courses.filter(isCourseSearched).map((item, index) => {
-            return (
-              <AnimatedTouchableOpacity
-                entering={EnteringAnimationFromBottom}
-                key={index}
-                style={[styles.courseCard, item.addedStyle]}
-              >
-                <Text style={styles.courseCardTitle}>{item.title}</Text>
-                <Text style={styles.courseCount}>{item.number} Courses</Text>
-                <Image
-                  source={{
-                    uri: `https://path-to-your-image/${item.type}-icon.png`,
-                  }}
-                  style={styles.courseImage}
-                />
-              </AnimatedTouchableOpacity>
-            );
-          })}
+          <Animated.View style={[styles.courseCard, styles.marketingCard]}>
+            <Text style={styles.courseCardTitle}>Dale Carnegie</Text>
+            <Text style={styles.courseCount}>27 Courses</Text>
+            <Image
+              source={{ uri: "https://path-to-your-image/marketing-icon.png" }}
+              style={styles.courseImage}
+            />
+          </Animated.View>
+          <Animated.View style={[styles.courseCard, styles.designCard]}>
+            <Text style={styles.courseCardTitle}>How to manage oneself</Text>
+            <Text style={styles.courseCount}>41 Courses</Text>
+            <Image
+              source={{ uri: "https://path-to-your-image/design-icon.png" }}
+              style={styles.courseImage}
+            />
+          </Animated.View>
         </View>
       </ScrollView>
 
-      {/*Modals*/}
+      {/* Profile Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.fixedModalContainer}>
+          <View style={styles.modalContent}>
+            {/* Modal Header */}
+            <View style={styles.modalHeader}>
+              <Feather
+                name="x"
+                size={24}
+                color="#333"
+                onPress={() => setModalVisible(false)}
+              />
+              <Text style={styles.modalTitle}>Your Statistics</Text>
+            </View>
+         
 
-      <ProfileModalPage ref={profilePage} />
+            <ScrollView contentContainerStyle={styles.modalScroll}>
+              {/* Chart */}
+              <LineChart
+                data={chartData}
+                width={width * 0.9} // Chart width
+                height={220}
+                chartConfig={{
+                  backgroundColor: "#e26a00",
+                  backgroundGradientFrom: "#fb8c00",
+                  backgroundGradientTo: "#ffa726",
+                  decimalPlaces: 1,
+                  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                  style: {
+                    borderRadius: 16,
+                  },
+                  propsForDots: {
+                    r: "6",
+                    strokeWidth: "2",
+                    stroke: "#ffa726",
+                  },
+                }}
+                bezier
+                style={{
+                  marginVertical: 20,
+                  borderRadius: 16,
+                }}
+              />
+
+              {/* Reading Goals */}
+              <Text style={styles.sectionHeader}>Reading Goals</Text>
+              <Text style={styles.sectionDescription}>
+                Read every day, see your stats soar and finish more books.
+              </Text>
+
+              {/* Timer Section */}
+              <View style={styles.timerContainer}>
+                <Text style={styles.readingGoalTitle}>Today's Reading</Text>
+                <Text style={styles.timerText}>0:00</Text>
+                <Text style={styles.goalText}>of your 3-minute goal</Text>
+
+                {/* "Keep Reading" Button */}
+                <TouchableOpacity style={styles.readButton}>
+                  <Text style={styles.readButtonText}>Keep Reading</Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* Streak Section */}
+              <Text style={styles.sectionHeader}>Streak</Text>
+              <View style={styles.streakContainer}>
+                {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => (
+                  <View key={index} style={styles.streakCircle}>
+                    <Text style={styles.streakText}>{day}</Text>
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
+
+           
+           
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -156,38 +198,64 @@ export default function CoursePage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FaFaFa",
+    backgroundColor: "#FAFAFA",
     padding: 20,
   },
   scrollContainer: {
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
+  progressContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  progressCircle: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 40,
+    height: 40,
+    marginRight: 16,
+    position: 'relative',
+  },
+  progressArc: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 40,
+    height: 40,
+    borderWidth: 3,
+    borderColor: '#ccc',
+    borderRadius: 20,
+    borderBottomColor: 'transparent',
+    transform: [{ rotate: '45deg' }], // Fixed rotation angle
+  },
+  progressText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  progressTotal: {
+    fontSize: 10,
+  },
+  
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 20,
     width: "100%",
+    marginTop: 15,
   },
   greeting: {
-    fontSize: 25,
+    fontSize: 38,
     fontWeight: "bold",
     color: "#333",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#4169E1",
-    marginBottom: 20,
-    textAlign: "center",
+    marginTop: 10,
   },
   searchBar: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#FFF",
     borderRadius: 10,
-    borderColor: "ddd",
     paddingLeft: 15,
     marginBottom: 30,
     shadowColor: "#000",
@@ -209,15 +277,15 @@ const styles = StyleSheet.create({
     marginLeft: 9,
   },
   continueCard: {
-    backgroundColor: "#FEE4CF",
+    backgroundColor: "white",
     borderRadius: 12,
     padding: 20,
     marginBottom: 20,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
     shadowRadius: 5,
-    elevation: 3,
+    elevation: 2,
     width: "100%",
   },
   continueCardContent: {
@@ -230,11 +298,6 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 5,
   },
-  cardSubtitle: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 10,
-  },
   lessonIndicator: {
     flexDirection: "row",
     alignItems: "center",
@@ -245,67 +308,96 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   scooterImage: {
-    width: 80,
-    height: 80,
-    resizeMode: "contain",
-  },
-  continueYourCourse: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#4169E1",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-    marginBottom: 15,
-    textAlign: "center",
+    width: 100,
+    height: 100,
   },
   courseCards: {
     flexDirection: "row",
-    flexWrap: "wrap",
     justifyContent: "space-between",
-    width: "100%",
   },
   courseCard: {
-    width: "48%",
-    borderRadius: 15,
+    flex: 1,
+    backgroundColor: "white",
+    borderRadius: 12,
     padding: 20,
-    height: 160,
-    justifyContent: "space-between",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
-    marginBottom: 10,
+    marginRight: 10,
+    height: 150,
   },
-  marketingCard: {
-    backgroundColor: "#FFB6C1",
+  streakContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: 10,
+    marginBottom: 30,
   },
-  designCard: {
-    backgroundColor: "#ADD8E6",
+  streakCircle: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: "#e0e0e0",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  developmentCard: {
-    backgroundColor: "#98FB98",
-  },
-  businessCard: {
-    backgroundColor: "#FFDAB9",
-  },
-  courseCardTitle: {
+  streakText: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#333",
   },
-  courseCount: {
-    fontSize: 14,
-    color: "#555",
+  fixedModalContainer: {
+    flex: 1,
+    justifyContent: "flex-end", // Align modal to the bottom
+    backgroundColor: "rgba(0, 0, 0, 0.4)", // Semi-transparent background
   },
-  courseImage: {
-    width: 40,
-    height: 40,
-    resizeMode: "contain",
+  modalContent: {
+    backgroundColor: "#fafafa",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    padding: 20,
+    width: "100%",
+    height: "80%",
+  },
+  modalHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  modalHr: {
+    marginVertical: 15,
+    borderBottomColor: "#ccc",
+    borderBottomWidth: 1,
+  },
+  timerContainer: {
+    alignItems: "center",
+    marginBottom: 30,
+  },
+  timerText: {
+    fontSize: 40,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  goalText: {
+    fontSize: 16,
+    color: "#666",
+  },
+  readButton: {
+    backgroundColor: "#393838",
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  readButtonText: {
+    color: "#FFF",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
