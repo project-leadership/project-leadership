@@ -29,6 +29,7 @@ import TruncateText from "./components/TruncateText";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import CustomDropDownMenu from "./components/CustomDropDownMenu";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("window");
 
@@ -327,6 +328,7 @@ export default function App() {
   };
 
   return (
+    <SafeAreaProvider>
     <GestureHandlerRootView>
       <SafeAreaView style={styles.container}>
         {currentPage === "home" && (
@@ -475,6 +477,7 @@ export default function App() {
         <StatusBar style="auto" />
       </SafeAreaView>
     </GestureHandlerRootView>
+    </SafeAreaProvider>
   );
 }
 

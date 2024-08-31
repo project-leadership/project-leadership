@@ -1,5 +1,7 @@
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { forwardRef, useState } from "react";
+import SettingsPage from "./SettingsPage";
+import { ScrollView } from "react-native-gesture-handler";
 
 const SettingsModalPage = forwardRef(({}, ref) => {
   const [visible, setVisible] = useState(false);
