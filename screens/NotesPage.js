@@ -6,21 +6,21 @@ const { width } = Dimensions.get('window');
 
 const continueItems = [
   {
-    image: require('../assets/being-creative.png'),
+    // image: require('../assets/being-creative.png'),
     backgroundColor: "white",
     title: "Being Creative",
     author: "Author Name",
     progress: "50% complete",
   },
   {
-    image: require('../assets/biz.png'),
+    // image: require('../assets/biz.png'),
     backgroundColor: "white",
     title: "Business Deal",
     author: "Author Name",
     progress: "30% complete",
   },
   {
-    image: require('../assets/strategy.png'),
+    // image: require('../assets/strategy.png'),
     backgroundColor: "white",
     title: "Strategy",
     author: "Author Name",
