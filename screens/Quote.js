@@ -1,13 +1,9 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./styles";
+import FloatingActionButton from "../components/FloatingActionButton";
+import Icon from "react-native-vector-icons/Feather";
 
 const quotes = [
   {
@@ -31,7 +27,7 @@ const quotes = [
 
 const Quote = () => {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <View style={localStyles.headerContainer}>
         <Text style={localStyles.headerTitle}>Quotes</Text>
       </View>
@@ -54,6 +50,8 @@ const Quote = () => {
           />
         </ScrollView>
       </View>
+
+      {/* FAB in App.js */}
     </SafeAreaView>
   );
 };
@@ -61,6 +59,9 @@ const Quote = () => {
 export default Quote;
 
 const localStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   headerTitle: {
     fontSize: 38,
     fontWeight: "bold",

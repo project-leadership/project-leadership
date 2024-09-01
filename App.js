@@ -31,6 +31,7 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 import CustomDropDownMenu from "./components/CustomDropDownMenu";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Quote from "./screens/Quote";
+import FloatingActionButton from "./components/FloatingActionButton";
 
 const { width, height } = Dimensions.get("window");
 
@@ -331,154 +332,160 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-    <GestureHandlerRootView>
-      <SafeAreaView style={styles.container}>
-        {currentPage === "home" && (
-          <Animated.View
-            style={[
-              styles.header,
-              {
-                height: headerHeight,
-                transform: [{ translateY: headerPosition }],
-                position: "absolute",
-                left: -23,
-                right: 0,
-                zIndex: 1000,
-                backgroundColor: "#fafafa",
-              },
-            ]}
-          >
+      <GestureHandlerRootView>
+        <SafeAreaView style={styles.container}>
+          {currentPage === "home" && (
             <Animated.View
               style={[
-                styles.headerContent,
+                styles.header,
                 {
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  paddingHorizontal: 20,
+                  height: headerHeight,
+                  transform: [{ translateY: headerPosition }],
+                  position: "absolute",
+                  left: -23,
+                  right: 0,
+                  zIndex: 1000,
+                  backgroundColor: "#fafafa",
                 },
               ]}
             >
-              <Animated.Text
+              <Animated.View
                 style={[
-                  styles.headerText,
-                  { fontSize: headerFontSize, marginLeft: 20 },
+                  styles.headerContent,
+                  {
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    paddingHorizontal: 20,
+                  },
                 ]}
               >
-                Project Leadership
-              </Animated.Text>
-              <TouchableOpacity onPress={() => setShowOptions(!showOptions)}>
-                <View style={styles.hamburgerIcon}>
-                  <Feather name="align-center" size={24} color="black" />
-                </View>
-              </TouchableOpacity>
-            </Animated.View>
-          </Animated.View>
-        )}
-
-        {renderContent()}
-
-        {currentPage === "home" && (
-          <>
-            <TouchableOpacity
-              style={styles.fab}
-              onPress={handleFabPress}
-              onLongPress={toggleFab}
-            >
-              <Feather name="edit" size={34} color="#ffffff" />
-            </TouchableOpacity>
-
-            {isFabOpen && (
-              <Modal transparent animationType="fade">
-                <BlurView intensity={50} style={localStyles.blurView}>
-                  <TouchableOpacity
-                    style={localStyles.closeArea}
-                    onPress={toggleFab}
-                  />
-
-                  <View style={localStyles.fabOptionsContainer}>
-                    {fabOptions.map((option) => (
-                      <TouchableOpacity
-                        key={option.label}
-                        style={localStyles.fabOption}
-                        onPress={() =>
-                          navigateTo(
-                            option.label.toLowerCase().replace(" ", "")
-                          )
-                        }
-                      >
-                        <Feather
-                          name={option.icon}
-                          size={20}
-                          color="#393938"
-                          style={localStyles.fabOptionIcon}
-                        />
-                        <Text style={localStyles.fabOptionText}>
-                          {option.label}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
+                <Animated.Text
+                  style={[
+                    styles.headerText,
+                    { fontSize: headerFontSize, marginLeft: 20 },
+                  ]}
+                >
+                  Project Leadership
+                </Animated.Text>
+                <TouchableOpacity onPress={() => setShowOptions(!showOptions)}>
+                  <View style={styles.hamburgerIcon}>
+                    <Feather name="align-center" size={24} color="black" />
                   </View>
-                </BlurView>
-              </Modal>
-            )}
-          </>
-        )}
+                </TouchableOpacity>
+              </Animated.View>
+            </Animated.View>
+          )}
 
-        <View style={styles.bottomNav}>
-          <LinearGradient
-            colors={["rgba(250, 250, 250, 0)", "rgba(250, 250, 250, 0.9)"]}
-            style={styles.gradient}
-          />
-          <TouchableOpacity
-            style={styles.navItem}
-            onPress={() => navigateTo("home")}
-          >
-            <Feather
-              name="home"
-              size={24}
-              color={currentPage === "home" ? "#393938" : "grey"}
+          {renderContent()}
+
+          {currentPage === "home" && (
+            <>
+              <TouchableOpacity
+                style={styles.fab}
+                onPress={handleFabPress}
+                onLongPress={toggleFab}
+              >
+                <Feather name="edit" size={34} color="#ffffff" />
+              </TouchableOpacity>
+
+              {isFabOpen && (
+                <Modal transparent animationType="fade">
+                  <BlurView intensity={50} style={localStyles.blurView}>
+                    <TouchableOpacity
+                      style={localStyles.closeArea}
+                      onPress={toggleFab}
+                    />
+
+                    <View style={localStyles.fabOptionsContainer}>
+                      {fabOptions.map((option) => (
+                        <TouchableOpacity
+                          key={option.label}
+                          style={localStyles.fabOption}
+                          onPress={() =>
+                            navigateTo(
+                              option.label.toLowerCase().replace(" ", "")
+                            )
+                          }
+                        >
+                          <Feather
+                            name={option.icon}
+                            size={20}
+                            color="#393938"
+                            style={localStyles.fabOptionIcon}
+                          />
+                          <Text style={localStyles.fabOptionText}>
+                            {option.label}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </BlurView>
+                </Modal>
+              )}
+            </>
+          )}
+
+          <View style={styles.bottomNav}>
+            <LinearGradient
+              colors={["rgba(250, 250, 250, 0)", "rgba(250, 250, 250, 0.9)"]}
+              style={styles.gradient}
             />
-            <Text
-              style={{ color: currentPage === "home" ? "#393938" : "grey" }}
+            <TouchableOpacity
+              style={styles.navItem}
+              onPress={() => navigateTo("home")}
             >
-              Home
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.navItem}
-            onPress={() => navigateTo("course")}
-          >
-            <Feather
-              name="book-open"
-              size={24}
-              color={currentPage === "course" ? "#393938" : "grey"}
-            />
-            <Text
-              style={{ color: currentPage === "course" ? "#393938" : "grey" }}
+              <Feather
+                name="home"
+                size={24}
+                color={currentPage === "home" ? "#393938" : "grey"}
+              />
+              <Text
+                style={{ color: currentPage === "home" ? "#393938" : "grey" }}
+              >
+                Home
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.navItem}
+              onPress={() => navigateTo("course")}
             >
-              Course
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.navItem}
-            onPress={() => navigateTo("notes")}
-          >
-            <Feather
-              name="book"
-              size={24}
-              color={currentPage === "notes" ? "#393938" : "grey"}
-            />
-            <Text
-              style={{ color: currentPage === "notes" ? "#393938" : "grey" }}
+              <Feather
+                name="book-open"
+                size={24}
+                color={currentPage === "course" ? "#393938" : "grey"}
+              />
+              <Text
+                style={{ color: currentPage === "course" ? "#393938" : "grey" }}
+              >
+                Course
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.navItem}
+              onPress={() => navigateTo("notes")}
             >
-              Notes
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <StatusBar style="auto" />
-      </SafeAreaView>
-    </GestureHandlerRootView>
+              <Feather
+                name="book"
+                size={24}
+                color={currentPage === "notes" ? "#393938" : "grey"}
+              />
+              <Text
+                style={{ color: currentPage === "notes" ? "#393938" : "grey" }}
+              >
+                Notes
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <StatusBar style="auto" />
+
+          {currentPage === "quote" && (
+            <FloatingActionButton backgroundColor="#606060" size={65}>
+              <Feather name="plus" color="white" size={34} />
+            </FloatingActionButton>
+          )}
+        </SafeAreaView>
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 }
