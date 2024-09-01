@@ -28,7 +28,7 @@ const continueItems = [
   },
 ];
 
-const NotesPage = () => {
+const NotesPage = ({ navigateTo }) => {
   const [quoteModalVisible, setQuoteModalVisible] = useState(false);
   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
   const [homeworkModalVisible, setHomeworkModalVisible] = useState(false);
@@ -86,7 +86,7 @@ const NotesPage = () => {
       </ScrollView>
 
       {/* Quote Container */}
-      <TouchableOpacity onPress={() => setQuoteModalVisible(true)}>
+      <TouchableOpacity onPress={() => navigateTo("quote")}>
         <View style={styles.quoteSection}>
           <View style={styles.quoteContainer}>
             <Text style={styles.quoteTitle}>Quote of the Day</Text>
@@ -259,7 +259,6 @@ const NotesPage = () => {
           </View>
         </View>
       </Modal>
-
     </ScrollView>
   );
 };

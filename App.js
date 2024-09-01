@@ -30,6 +30,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import CustomDropDownMenu from "./components/CustomDropDownMenu";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import Quote from "./screens/Quote";
 
 const { width, height } = Dimensions.get("window");
 
@@ -322,6 +323,7 @@ export default function App() {
           {currentPage === "homework" && <HomeworkPage />}
           {currentPage === "yourprinciple" && <YourPrinciplePage />}
           {currentPage === "ourprinciple" && <OurPrinciplePage />}
+          {currentPage === "quote" && <Quote />}
         </ScrollView>
       );
     }
