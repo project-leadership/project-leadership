@@ -44,6 +44,8 @@ export default function App() {
   // const [moreOptionsVisible, setMoreOptionsVisible] = useState(null);
   const [entryTemplate, setEntryTemplate] = useState("");
 
+  const quotePage = useRef(null);
+
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const headerHeight = scrollY.interpolate({
@@ -324,7 +326,7 @@ export default function App() {
           {currentPage === "homework" && <HomeworkPage />}
           {currentPage === "yourprinciple" && <YourPrinciplePage />}
           {currentPage === "ourprinciple" && <OurPrinciplePage />}
-          {currentPage === "quote" && <Quote />}
+          {currentPage === "quote" && <Quote ref={quotePage} />}
         </ScrollView>
       );
     }
@@ -480,7 +482,11 @@ export default function App() {
           <StatusBar style="auto" />
 
           {currentPage === "quote" && (
-            <FloatingActionButton backgroundColor="#606060" size={65}>
+            <FloatingActionButton
+              backgroundColor="#606060"
+              size={65}
+              onPress={() => quotePage.current.setIsFormVisible(true)}
+            >
               <Feather name="plus" color="white" size={34} />
             </FloatingActionButton>
           )}
