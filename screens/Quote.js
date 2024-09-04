@@ -33,6 +33,8 @@ const QUOTES = [
   },
 ];
 
+// TODO: add a x to close the page
+
 const Quote = forwardRef(({}, ref) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
 
