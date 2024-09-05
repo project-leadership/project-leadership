@@ -33,8 +33,6 @@ const QUOTES = [
   },
 ];
 
-// TODO: add a x to close the page
-
 const Quote = forwardRef(({}, ref) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
 
@@ -47,6 +45,12 @@ const Quote = forwardRef(({}, ref) => {
     isFormVisible,
     setIsFormVisible,
   };
+
+  const closeModal = () => {
+    setIsFormVisible(false);
+    setFormAuthor(undefined);
+    setFormContent(undefined);
+  }
 
   const retrieveData = async () => {
     setQuotes(
@@ -106,11 +110,7 @@ const Quote = forwardRef(({}, ref) => {
       <Modal
         animationType="slide"
         visible={isFormVisible}
-        onRequestClose={() => {
-          setIsFormVisible(false);
-          setFormAuthor(undefined);
-          setFormContent(undefined);
-        }}
+        onRequestClose={closeModal}
         transparent
       >
         <View style={localStyles.modalContainer}>
@@ -118,7 +118,7 @@ const Quote = forwardRef(({}, ref) => {
             <View style={localStyles.modalHeader}>
               <Feather
                 name="x"
-                onPress={() => setIsFormVisible(false)}
+                onPress={closeModal}
                 size={24}
                 color="#393938"
               />
