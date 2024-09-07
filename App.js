@@ -28,6 +28,8 @@ import * as Haptics from "expo-haptics";
 import TruncateText from "./components/TruncateText";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
+import Quote from "./screens/Quote";
+import FloatingActionButton from "./components/FloatingActionButton";
 
 const { width, height } = Dimensions.get("window");
 
@@ -39,6 +41,8 @@ export default function App() {
   const [showOptions, setShowOptions] = useState(false);
   const [moreOptionsVisible, setMoreOptionsVisible] = useState(null);
   const [entryTemplate, setEntryTemplate] = useState("");
+
+  const quotePage = useRef(null);
 
   const scrollY = useRef(new Animated.Value(0)).current;
 
@@ -164,8 +168,6 @@ export default function App() {
           scrollEventThrottle={16}
           horizontal={false}
         >
-         
-
           <View style={localStyles.entries}>
             {savedEntry ? (
               savedEntry.split("\n\n").map((entry, index) => (
@@ -177,14 +179,20 @@ export default function App() {
                       <View
                         style={{ flexDirection: "row", alignItems: "center" }}
                       >
-                        <View style={[localStyles.actionEntry, { backgroundColor: "#1ac2e8" }]}>
-                          <FontAwesome
-                            name="pencil"
-                            size={45}
-                            color="white"
-                          />
+                        <View
+                          style={[
+                            localStyles.actionEntry,
+                            { backgroundColor: "#1ac2e8" },
+                          ]}
+                        >
+                          <FontAwesome name="pencil" size={45} color="white" />
                         </View>
-                        <View style={[localStyles.actionEntry, { backgroundColor: "#db4050" }]}>
+                        <View
+                          style={[
+                            localStyles.actionEntry,
+                            { backgroundColor: "#db4050" },
+                          ]}
+                        >
                           <FontAwesome name="trash" size={45} color="white" />
                         </View>
                       </View>
@@ -195,8 +203,17 @@ export default function App() {
                       <View
                         style={{ flexDirection: "row", alignItems: "center" }}
                       >
-                        <View style={[localStyles.actionEntry, { backgroundColor: "#db4040" }]}>
-                          <FontAwesome name="bookmark-o" size={45} color="white" />
+                        <View
+                          style={[
+                            localStyles.actionEntry,
+                            { backgroundColor: "#db4040" },
+                          ]}
+                        >
+                          <FontAwesome
+                            name="bookmark-o"
+                            size={45}
+                            color="white"
+                          />
                         </View>
                       </View>
                     );
@@ -281,7 +298,7 @@ export default function App() {
           {currentPage === "homework" && <HomeworkPage />}
           {currentPage === "yourprinciple" && <YourPrinciplePage />}
           {currentPage === "ourprinciple" && <OurPrinciplePage />}
-      
+          {currentPage === "quote" && <Quote ref={quotePage} />}
         </ScrollView>
       );
     }
@@ -380,6 +397,12 @@ export default function App() {
               </Modal>
             )}
           </>
+        )}
+
+        {currentPage === "quote" && (
+          <FloatingActionButton backgroundColor={"#434343"} size={65} onPress={() => quotePage.current.setIsFormVisible(true)}>
+            <Feather name="plus" color={"white"} size={34} />
+          </FloatingActionButton>
         )}
 
         <View style={styles.bottomNav}>
@@ -505,10 +528,10 @@ const localStyles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 6,
     elevation: 2,
-   marginBottom:10,
+    marginBottom: 10,
     justifyContent: "center",
-    marginLeft:12,
-    marginRight:8,
+    marginLeft: 12,
+    marginRight: 8,
   },
   entryTemplate: {
     fontSize: 22,
