@@ -4,3 +4,9 @@
 package-lock.json
 /android
 /ios
+/onboarding/.expo
+/onboarding/node_modules
+onboarding/package-lock.json
+/onboarding/android
+/onboarding/ios
+/onboarding/.vscode
