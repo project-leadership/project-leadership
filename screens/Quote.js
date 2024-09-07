@@ -38,6 +38,7 @@ const Quote = forwardRef(({}, ref) => {
 
   const [formAuthor, setFormAuthor] = useState();
   const [formContent, setFormContent] = useState();
+  const [isLoadingSave, setIsLoadingSave] = useState(false);
 
   const [quotes, setQuotes] = useState([]);
 
@@ -63,6 +64,7 @@ const Quote = forwardRef(({}, ref) => {
   }, []);
 
   const handleSave = async () => {
+    setIsLoadingSave(true);
     retrieveData();
 
     const newQuote = {
@@ -77,6 +79,7 @@ const Quote = forwardRef(({}, ref) => {
     setIsFormVisible(false);
 
     retrieveData();
+    setIsLoadingSave(false);
   };
 
   return (
@@ -126,6 +129,7 @@ const Quote = forwardRef(({}, ref) => {
               <TouchableOpacity
                 style={localStyles.saveButton}
                 onPress={handleSave}
+                disabled={isLoadingSave}
               >
                 <Text style={localStyles.saveButtonText}>Save</Text>
               </TouchableOpacity>
