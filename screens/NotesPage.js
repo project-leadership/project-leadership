@@ -1,8 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, Modal, TouchableOpacity, Dimensions } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Modal,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import { Feather } from "@expo/vector-icons";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 const continueItems = [
   {
@@ -55,7 +64,7 @@ const NotesPage = ({ navigateTo }) => {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setSettingsModalVisible(true)}>
             <Image
-              source={require('../assets/profile.png')}
+              source={require("../assets/profile.png")}
               style={styles.avatar}
             />
           </TouchableOpacity>
@@ -66,12 +75,12 @@ const NotesPage = ({ navigateTo }) => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.continueList}>
           {continueItems.map((item, index) => (
-            <View 
-              key={index} 
+            <View
+              key={index}
               style={[
-                styles.continueItem, 
+                styles.continueItem,
                 { backgroundColor: item.backgroundColor },
-                styles.continueItemShadow
+                styles.continueItemShadow,
               ]}
             >
               <Image source={item.image} style={styles.bookCover} />
@@ -86,11 +95,13 @@ const NotesPage = ({ navigateTo }) => {
       </ScrollView>
 
       {/* Quote Container */}
-      <TouchableOpacity onPress={() => navigateTo("quote")}>
+      <TouchableOpacity>
         <View style={styles.quoteSection}>
           <View style={styles.quoteContainer}>
             <Text style={styles.quoteTitle}>Quote of the Day</Text>
-            <Text style={styles.quoteText}>"Pain + Reflection = Progress" - Ray Dalio</Text>
+            <Text style={styles.quoteText}>
+              "Pain + Reflection = Progress" - Ray Dalio
+            </Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -106,17 +117,27 @@ const NotesPage = ({ navigateTo }) => {
         </View>
         <TouchableOpacity onPress={toggleFavorite} style={styles.iconItem}>
           <Feather name="heart" size={24} color={isFavorite ? "red" : "grey"} />
-          <Text style={styles.iconLabel}>Favourite</Text>
+          <Text style={styles.iconLabel}>Favorite</Text>
         </TouchableOpacity>
       </View>
+      <TouchableOpacity onPress={() => navigateTo("quote")}>
+        <Text style={[styles.iconLabel, styles.viewAllLabel]}>View All</Text>
+      </TouchableOpacity>
 
       {/* Settings Section */}
       <TouchableOpacity onPress={() => setSettingsModalVisible(true)}>
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Settings</Text>
           <View style={styles.settingsSubHeaderContainer}>
-            <Text style={styles.subHeader}>Manage your Account and Preferences, Get Help, and More...</Text>
-            <Feather name="settings" size={45} color="black" style={styles.settingsIcon} />
+            <Text style={styles.subHeader}>
+              Manage your Account and Preferences, Get Help, and More...
+            </Text>
+            <Feather
+              name="settings"
+              size={45}
+              color="black"
+              style={styles.settingsIcon}
+            />
           </View>
         </View>
       </TouchableOpacity>
@@ -125,7 +146,9 @@ const NotesPage = ({ navigateTo }) => {
       <TouchableOpacity onPress={() => setHomeworkModalVisible(true)}>
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Homework</Text>
-          <Text style={styles.homeworkText}>Read Chapter 1 of "Principles" by Ray Dalio</Text>
+          <Text style={styles.homeworkText}>
+            Read Chapter 1 of "Principles" by Ray Dalio
+          </Text>
         </View>
       </TouchableOpacity>
 
@@ -138,14 +161,18 @@ const NotesPage = ({ navigateTo }) => {
               <Feather name="file-text" size={24} color="#4A90E2" />
               <View style={styles.recentNoteDetails}>
                 <Text style={styles.recentNoteTitle}>Chapter 1 Summary</Text>
-                <Text style={styles.recentNoteDate}>Last edited: 2 days ago</Text>
+                <Text style={styles.recentNoteDate}>
+                  Last edited: 2 days ago
+                </Text>
               </View>
             </View>
             <View style={styles.recentNoteItem}>
               <Feather name="file-text" size={24} color="#4A90E2" />
               <View style={styles.recentNoteDetails}>
                 <Text style={styles.recentNoteTitle}>Key Concepts</Text>
-                <Text style={styles.recentNoteDate}>Last edited: 1 week ago</Text>
+                <Text style={styles.recentNoteDate}>
+                  Last edited: 1 week ago
+                </Text>
               </View>
             </View>
           </View>
@@ -320,49 +347,49 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fafafa',
+    backgroundColor: "#fafafa",
   },
   headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 24,
-    backgroundColor: '#fafafa',
+    backgroundColor: "#fafafa",
     marginTop: 20,
   },
   headerTitle: {
     fontSize: 38,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "#393838",
   },
   progressContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   progressCircle: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     width: 40,
     height: 40,
     marginRight: 16,
-    position: 'relative',
+    position: "relative",
   },
   progressArc: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     width: 40,
     height: 40,
     borderWidth: 3,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 20,
-    borderBottomColor: 'transparent',
-    transform: [{ rotate: '45deg' }], // Fixed rotation angle
+    borderBottomColor: "transparent",
+    transform: [{ rotate: "45deg" }], // Fixed rotation angle
   },
   progressText: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   progressTotal: {
     fontSize: 10,
@@ -373,13 +400,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   continueList: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
   continueItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     width: 240,
     height: 100,
     marginRight: 16,
@@ -396,7 +423,7 @@ const styles = StyleSheet.create({
   bookCover: {
     width: 60,
     height: 80,
-    resizeMode: 'cover',
+    resizeMode: "cover",
     borderRadius: 4,
     marginRight: 12,
   },
@@ -405,25 +432,25 @@ const styles = StyleSheet.create({
   },
   bookTitle: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
   },
   bookAuthor: {
     fontSize: 12,
-    color: '#666',
+    color: "#666",
     marginBottom: 4,
   },
   bookProgress: {
     fontSize: 12,
-    color: '#888',
+    color: "#888",
   },
   quoteSection: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     marginTop: 16,
   },
   quoteContainer: {
-    backgroundColor: '#393838',
+    backgroundColor: "#393838",
     padding: 16,
     height: 150,
     width: 340,
@@ -431,35 +458,35 @@ const styles = StyleSheet.create({
   },
   quoteTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 8,
-    color: 'white',
+    color: "white",
   },
   quoteText: {
     fontSize: 16,
-    fontStyle: 'italic',
-    color: 'white',
+    fontStyle: "italic",
+    color: "white",
   },
   iconContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
     paddingHorizontal: 16,
     marginTop: 16,
   },
   iconItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   iconLabel: {
     marginLeft: 8,
     fontSize: 16,
-    color: 'grey',
+    color: "grey",
   },
   openText: {
     fontSize: 16,
-    color: 'grey',
-    fontWeight: 'bold',
+    color: "grey",
+    fontWeight: "bold",
   },
   sectionContainer: {
     backgroundColor: "white",
@@ -476,17 +503,17 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   settingsSubHeaderContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 8,
     width: 280,
   },
   subHeader: {
     fontSize: 14,
-    color: 'grey',
+    color: "grey",
     flex: 1,
   },
   settingsIcon: {
@@ -499,8 +526,8 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   recentNoteItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 16,
   },
   recentNoteDetails: {
@@ -508,42 +535,47 @@ const styles = StyleSheet.create({
   },
   recentNoteTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   recentNoteDate: {
     fontSize: 14,
-    color: '#888',
+    color: "#888",
   },
   streakContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginTop: 16,
   },
   streakCircle: {
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: '#4A90E2',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#4A90E2",
+    alignItems: "center",
+    justifyContent: "center",
   },
   streakText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   sectionHeader: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 20,
   },
   sectionDescription: {
     fontSize: 16,
-    color: '#666',
+    color: "#666",
     marginTop: 8,
   },
   readingGoalTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+  },
+  viewAllLabel: {
+    textAlign: "center",
+    marginTop: 10,
+    textDecorationLine: "underline",
   },
 });
 
