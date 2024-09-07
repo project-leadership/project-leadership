@@ -201,7 +201,7 @@ export default StyleSheet.create({
   },
   bottomNav: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "row-reverse",
     justifyContent: "space-around",
     alignItems: "center",
     height: 60,

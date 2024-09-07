@@ -34,7 +34,7 @@ import FloatingActionButton from "./components/FloatingActionButton";
 const { width, height } = Dimensions.get("window");
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState("home");
+  const [currentPage, setCurrentPage] = useState("notes");
   const [showPopup, setShowPopup] = useState(true);
   const [isFabOpen, setFabOpen] = useState(false);
   const [savedEntry, setSavedEntry] = useState("");
@@ -157,7 +157,7 @@ export default function App() {
   };
 
   const renderContent = () => {
-    if (currentPage === "home") {
+    if (currentPage === "notes") {
       return (
         <Animated.ScrollView
           contentContainerStyle={{ paddingTop: 120 }}
@@ -281,7 +281,7 @@ export default function App() {
     } else {
       return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} horizontal={false}>
-          {currentPage === "notes" && (
+          {currentPage === "home" && (
             <NotesPage
               navigateTo={navigateTo}
               deleteEntry={deleteEntry}
@@ -307,7 +307,7 @@ export default function App() {
   return (
     <GestureHandlerRootView>
       <SafeAreaView style={styles.container}>
-        {currentPage === "home" && (
+        {currentPage === "notes" && (
           <Animated.View
             style={[
               styles.header,
@@ -352,7 +352,7 @@ export default function App() {
 
         {renderContent()}
 
-        {currentPage === "home" && (
+        {currentPage === "notes" && (
           <>
             <TouchableOpacity
               style={styles.fab}
@@ -412,17 +412,17 @@ export default function App() {
           />
           <TouchableOpacity
             style={styles.navItem}
-            onPress={() => navigateTo("home")}
+            onPress={() => navigateTo("notes")}
           >
             <Feather
-              name="home"
+              name="book"
               size={24}
-              color={currentPage === "home" ? "#393938" : "grey"}
+              color={currentPage === "notes" ? "#393938" : "grey"}
             />
             <Text
-              style={{ color: currentPage === "home" ? "#393938" : "grey" }}
+              style={{ color: currentPage === "notes" ? "#393938" : "grey" }}
             >
-              Home
+              Notes
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -442,17 +442,17 @@ export default function App() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.navItem}
-            onPress={() => navigateTo("notes")}
+            onPress={() => navigateTo("home")}
           >
             <Feather
-              name="book"
+              name="home"
               size={24}
-              color={currentPage === "notes" ? "#393938" : "grey"}
+              color={currentPage === "home" ? "#393938" : "grey"}
             />
             <Text
-              style={{ color: currentPage === "notes" ? "#393938" : "grey" }}
+              style={{ color: currentPage === "home" ? "#393938" : "grey" }}
             >
-              Notes
+              Home
             </Text>
           </TouchableOpacity>
         </View>
